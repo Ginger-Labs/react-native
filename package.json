@@ -17,6 +17,7 @@
   },
   "main": "Libraries/react-native/react-native-implementation.js",
   "files": [
+    "/dist",
     ".flowconfig",
     "android",
     "cli.js",
@@ -53,6 +54,9 @@
     "!template/package-lock.json"
   ],
   "scripts": {
+    "clean": "rm -rf dist; rm -rf build",
+    "export_npm_env": "./scripts/export_npm_env.sh",
+    "build": "bash -c '. ./scripts/export_npm_env.sh && ./scripts/build.sh'",
     "start": "react-native start",
     "test": "jest",
     "test-ci": "jest --maxWorkers=2 --ci --reporters=\"default\" --reporters=\"jest-junit\"",
