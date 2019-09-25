@@ -15,7 +15,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)
 
 LOCAL_CFLAGS += -fvisibility=hidden -fexceptions -frtti
 
-LOCAL_STATIC_LIBRARIES := libjsi libjsireact jscruntime
+LOCAL_STATIC_LIBRARIES := libjsi libjsireact v8runtime
 LOCAL_SHARED_LIBRARIES := libfolly_json libfb libreactnativejni
 
 include $(BUILD_SHARED_LIBRARY)

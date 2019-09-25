@@ -5,7 +5,7 @@
 
 #include <fb/fbjni.h>
 #include <folly/Memory.h>
-#include <jsi/JSCRuntime.h>
+#include <jsi/v8runtime/V8RuntimeFactory.h>
 #include <jsireact/JSIExecutor.h>
 #include <react/jni/JReactMarker.h>
 #include <react/jni/JSLogging.h>
@@ -29,7 +29,7 @@ class JSCExecutorFactory : public JSExecutorFactory {
       react::bindNativeLogger(runtime, androidLogger);
     };
     return folly::make_unique<JSIExecutor>(
-        jsc::makeJSCRuntime(),
+        createV8Runtime(),
         delegate,
         JSIExecutor::defaultTimeoutInvoker,
         installBindings);
