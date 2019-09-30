@@ -20,6 +20,7 @@ import android.text.TextWatcher;
 import android.text.TextUtils;
 import android.text.method.KeyListener;
 import android.text.method.QwertyKeyListener;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -88,6 +89,8 @@ public class ReactEditText extends EditText {
   public ReactEditText(Context context) {
     super(context);
     setFocusableInTouchMode(false);
+
+    Log.e("ReactEditText: ", "Test message from EditText");
 
     mReactBackgroundManager = new ReactViewBackgroundManager(this);
     mInputMethodManager = (InputMethodManager)
