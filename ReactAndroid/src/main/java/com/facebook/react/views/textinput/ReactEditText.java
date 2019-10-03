@@ -82,6 +82,8 @@ public class ReactEditText extends EditText {
   private boolean mOnKeyPress = false;
   private TextAttributes mTextAttributes;
 
+  private boolean mEnabled; // is this edittext enabled
+
   private ReactViewBackgroundManager mReactBackgroundManager;
 
   private static final KeyListener sKeyListener = QwertyKeyListener.getInstanceForFullKeyboard();
@@ -614,6 +616,13 @@ public class ReactEditText extends EditText {
   @Override
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
+    try {
+      if (!mEnabled) return;
+      super.setEnabled(false);
+      super.setEnabled(mEnabled);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     if (mContainsImages) {
       Spanned text = getText();
       TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
