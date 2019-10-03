@@ -82,8 +82,6 @@ public class ReactEditText extends EditText {
   private boolean mOnKeyPress = false;
   private TextAttributes mTextAttributes;
 
-  private boolean mEnabled; // is this edittext enabled
-
   private ReactViewBackgroundManager mReactBackgroundManager;
 
   private static final KeyListener sKeyListener = QwertyKeyListener.getInstanceForFullKeyboard();
@@ -617,10 +615,9 @@ public class ReactEditText extends EditText {
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
     try {
-      Log.e("onAttachedToWindow", "mEnabled: " + mEnabled);
-      if (!mEnabled) return;
+      Log.e("onAttachedToWindow", "Re-enabling..");
       super.setEnabled(false);
-      super.setEnabled(mEnabled);
+      super.setEnabled(true);
     } catch (Exception e) {
       e.printStackTrace();
     }
