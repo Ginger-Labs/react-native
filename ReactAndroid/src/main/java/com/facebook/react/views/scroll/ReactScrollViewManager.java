@@ -10,6 +10,7 @@ package com.facebook.react.views.scroll;
 import android.graphics.Color;
 import androidx.core.view.ViewCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
@@ -184,6 +185,12 @@ public class ReactScrollViewManager
   @Override
   public void flashScrollIndicators(ReactScrollView scrollView) {
     scrollView.flashScrollIndicators();
+  }
+
+  @Override
+  public void scrollToIndex(ReactScrollView scrollView, ReactScrollViewCommandHelper.ScrollToCommandData data) {
+    Log.e(this.getName(), "scrollToIndex: x:" + data.mDestX);
+    Log.e(this.getName(), "scrollToIndex: y:" + data.mDestY);
   }
 
   @Override
