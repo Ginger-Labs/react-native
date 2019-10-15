@@ -188,9 +188,9 @@ public class ReactScrollViewManager
   }
 
   @Override
-  public void scrollToIndex(ReactScrollView scrollView, ReactScrollViewCommandHelper.ScrollToCommandData data) {
-    Log.e(this.getName(), "scrollToIndex: x:" + data.mDestX);
-    Log.e(this.getName(), "scrollToIndex: y:" + data.mDestY);
+  public void scrollToIndex(ReactScrollView scrollView, int index, boolean animated) {
+    Log.e(this.getName(), "scrollToIndex: index:" + index);
+    scrollView.scrollTo(0, scrollView.getChildAt(index).getTop());
   }
 
   @Override

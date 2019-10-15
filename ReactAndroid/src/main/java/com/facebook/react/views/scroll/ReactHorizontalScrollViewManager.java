@@ -175,9 +175,8 @@ public class ReactHorizontalScrollViewManager
   }
 
   @Override
-  public void scrollToIndex(ReactHorizontalScrollView scrollView, ReactScrollViewCommandHelper.ScrollToCommandData data) {
-    Log.e(this.getName(), "scrollToIndex: x:" + data.mDestX);
-    Log.e(this.getName(), "scrollToIndex: y:" + data.mDestY);
+  public void scrollToIndex(ReactHorizontalScrollView scrollView, int index, boolean animated) {
+    Log.e(this.getName(), "scrollToIndex: NOT IMPLEMENTED for Horizontal ScrollView");
   }
 
   @Override

@@ -26,7 +26,7 @@ public class ReactScrollViewCommandHelper {
   public static final int COMMAND_SCROLL_TO_INDEX = 4;
 
   public interface ScrollCommandHandler<T> {
-    void scrollToIndex(T scrollView, ScrollToCommandData data);
+    void scrollToIndex(T scrollView, int index, boolean animated);
     void scrollTo(T scrollView, ScrollToCommandData data);
     void scrollToEnd(T scrollView, ScrollToEndCommandData data);
     void flashScrollIndicators(T scrollView);
@@ -75,9 +75,9 @@ public class ReactScrollViewCommandHelper {
     Assertions.assertNotNull(args);
     switch (commandType) {
       case COMMAND_SCROLL_TO_INDEX: {
-        int index = Math.round(PixelUtil.toPixelFromDIP(args.getDouble(0)));
+        int index = args.getInt(0);
         boolean animated = args.getBoolean(1);
-        viewManager.scrollToIndex(scrollView, new ScrollToCommandData(0, index, animated));
+        viewManager.scrollToIndex(scrollView, index, animated);
         return;
       }
       case COMMAND_SCROLL_TO: {
