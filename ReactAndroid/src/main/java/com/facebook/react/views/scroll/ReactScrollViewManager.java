@@ -190,7 +190,7 @@ public class ReactScrollViewManager
   @Override
   public void scrollToIndex(ReactScrollView scrollView, int index, boolean animated) {
     Log.e(this.getName(), "scrollToIndex: index:" + index);
-    scrollView.scrollTo(0, scrollView.getChildAt(index).getTop());
+    scrollView.scrollTo(0, scrollView.getChildAt(index).getBottom());
   }
 
   @Override
