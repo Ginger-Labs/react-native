@@ -11,6 +11,7 @@ import android.graphics.Color;
 import androidx.core.view.ViewCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.common.MapBuilder;
@@ -190,7 +191,17 @@ public class ReactScrollViewManager
   @Override
   public void scrollToIndex(ReactScrollView scrollView, int index, boolean animated) {
     Log.e(this.getName(), "scrollToIndex: index:" + index);
-    scrollView.scrollTo(0, scrollView.getChildAt(index).getBottom());
+    View child = scrollView.getChildAt(index);
+    if (child == null) {
+      Log.e(this.getName(), "scrollToIndex: skipping because getChildAt: " + index + " returned null");
+      return;
+    }
+    int scrollTo = child.getBottom();
+    if (animated) {
+      scrollView.smoothScrollTo(0, scrollTo);
+    } else {
+      scrollView.scrollTo(0, scrollTo);
+    }
   }
 
   @Override

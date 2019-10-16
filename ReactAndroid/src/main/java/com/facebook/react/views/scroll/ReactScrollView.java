@@ -287,6 +287,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
   @Override
   public void updateClippingRect() {
+    Log.e("updateClippingRect: ", "mRemoveClippedSubviews:" + mRemoveClippedSubviews);
     if (!mRemoveClippedSubviews) {
       return;
     }
