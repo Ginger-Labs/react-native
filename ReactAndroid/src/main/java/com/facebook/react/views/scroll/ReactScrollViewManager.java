@@ -208,9 +208,11 @@ public class ReactScrollViewManager
   private View getSubChildAtTotalIndex(ReactScrollView scrollView, int index) {
     int groupCount = scrollView.getChildCount();
     int count = 0;
+    // Iterate the groups.
     for (int i = 0; i < groupCount; i++) {
       ReactViewGroup group = (ReactViewGroup) scrollView.getChildAt(i);
       int childCount = group.getChildCount();
+      // Iterate the inner groups.
       for (int j = 0; j < childCount; j++){
         if (count == index) {
           return group.getChildAt(j);
