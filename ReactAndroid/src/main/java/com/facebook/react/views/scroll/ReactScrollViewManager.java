@@ -25,6 +25,7 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
+import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.yoga.YogaConstants;
 
 import java.util.ArrayList;
@@ -191,9 +192,9 @@ public class ReactScrollViewManager
   @Override
   public void scrollToIndex(ReactScrollView scrollView, int index, boolean animated) {
     Log.e(this.getName(), "scrollToIndex: index:" + index);
-    View child = scrollView.getChildAt(index);
+    View child = getSubChildAtTotalIndex(scrollView, index);
     if (child == null) {
-      Log.e(this.getName(), "scrollToIndex: skipping because getChildAt: " + index + " returned null");
+      Log.e(this.getName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
       return;
     }
     int scrollTo = child.getBottom();
@@ -202,6 +203,23 @@ public class ReactScrollViewManager
     } else {
       scrollView.scrollTo(0, scrollTo);
     }
+  }
+
+  private View getSubChildAtTotalIndex(ReactScrollView scrollView, int index) {
+    int groupCount = scrollView.getChildCount();
+    int count = 0;
+    for (int i = 0; i < groupCount; i++) {
+      ReactViewGroup group = (ReactViewGroup) scrollView.getChildAt(i);
+      int childCount = group.getChildCount();
+      for (int j = 0; j < childCount; j++){
+        if (count == index) {
+          return group.getChildAt(j);
+        } else {
+          count++;
+        }
+      }
+    }
+    return null;
   }
 
   @Override
