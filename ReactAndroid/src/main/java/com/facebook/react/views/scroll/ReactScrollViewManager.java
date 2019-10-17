@@ -171,6 +171,11 @@ public class ReactScrollViewManager
     ViewCompat.setNestedScrollingEnabled(view, value);
   }
 
+  @ReactProp(name = "chatBehavior")
+  public void setChatBehavior(ReactScrollView view, boolean value) {
+    view.setChatBehavior(value);
+  }
+
   @Override
   public @Nullable Map<String, Integer> getCommandsMap() {
     return ReactScrollViewCommandHelper.getCommandsMap();

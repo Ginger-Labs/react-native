@@ -71,6 +71,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   private boolean mSnapToEnd = true;
   private View mContentView;
   private ReactViewBackgroundManager mReactBackgroundManager;
+  private boolean mChatBehavior = false;
 
   public ReactScrollView(ReactContext context) {
     this(context, null);
@@ -718,9 +719,15 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       scrollTo(getScrollX(), maxScrollY);
     }
 
-    if ((maxScrollY - currentScrollY) - Math.abs(bottom - oldBottom) < 100) {
+    if (mChatBehavior && (maxScrollY - currentScrollY) - Math.abs(bottom - oldBottom) == 0) {
       smoothScrollTo(getScrollX(), maxScrollY);
     }
+  }
+
+
+  public void setChatBehavior(boolean chatBehavior) {
+    Log.e(this.getClass().getSimpleName(), "setChatBehavior: " + chatBehavior);
+    mChatBehavior = chatBehavior;
   }
 
   @Override
@@ -748,8 +755,4 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     mReactBackgroundManager.setBorderStyle(style);
   }
 
-  @Override
-  public void onViewAdded(View child) {
-    super.onViewAdded(child);
-  }
 }
