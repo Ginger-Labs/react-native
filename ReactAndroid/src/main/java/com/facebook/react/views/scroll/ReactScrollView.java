@@ -126,7 +126,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   }
 
   public void setSendMomentumEvents(boolean sendMomentumEvents) {
-    Log.e("ReactScrollView: ", "setSendMomentumEvents:" + sendMomentumEvents);
     mSendMomentumEvents = sendMomentumEvents;
   }
 
@@ -167,19 +166,16 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   }
 
   public void flashScrollIndicators() {
-    Log.e("ReactScrollView: ", "flashScrollIndicators:");
     awakenScrollBars();
   }
 
   public void setOverflow(String overflow) {
-    Log.e("ReactScrollView: ", "setOverflow: " + overflow);
     mOverflow = overflow;
     invalidate();
   }
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    Log.e("ReactScrollView: ", "onMeasure: " + widthMeasureSpec + " x " + heightMeasureSpec);
     MeasureSpecAssertions.assertExplicitMeasureSpec(widthMeasureSpec, heightMeasureSpec);
 
     setMeasuredDimension(
@@ -189,7 +185,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
   @Override
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
-    Log.e("ReactScrollView: ", "onLayout: " + changed + "|" + l+ "|" + t+ "|" + r+ "|" + b);
     // Call with the present values in order to re-layout if necessary
     scrollTo(getScrollX(), getScrollY());
   }
@@ -197,7 +192,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
-    Log.e("ReactScrollView: ", "onSizeChanged: " + w + " x " + h);
     if (mRemoveClippedSubviews) {
       updateClippingRect();
     }
@@ -206,7 +200,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
-    Log.e("ReactScrollView: ", "onAttachedToWindow: " + mRemoveClippedSubviews);
     if (mRemoveClippedSubviews) {
       updateClippingRect();
     }
@@ -235,7 +228,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     if (!mScrollEnabled) {
       return false;
     }
-    Log.e("ReactScrollView: ", "onInterceptTouchEvent: ");
     try {
       if (super.onInterceptTouchEvent(ev)) {
         NativeGestureUtil.notifyNativeGestureStarted(this, ev);
@@ -297,7 +289,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     if (!mRemoveClippedSubviews) {
       return;
     }
-    Log.e("ReactScrollView", " updateClippingRect: mRemoveClippedSubviews:");
     Assertions.assertNotNull(mClippingRect);
 
     ReactClippingViewGroupHelper.calculateClippingRect(this, mClippingRect);
@@ -388,6 +379,10 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     return Math.max(0, contentHeight - viewportHeight);
   }
 
+  public View getContentView(){
+    return mContentView;
+  }
+
   @Override
   public void draw(Canvas canvas) {
     if (mEndFillColor != Color.TRANSPARENT) {
@@ -427,7 +422,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     if (mPostTouchRunnable != null) {
       return;
     }
-    Log.e("ReactScrollView", "handlePostTouchScrolling:");
     if (mSendMomentumEvents) {
       enableFpsListener();
       ReactScrollViewHelper.emitScrollMomentumBeginEvent(this, velocityX, velocityY);
@@ -717,7 +711,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     if (mContentView == null) {
       return;
     }
-    Log.e("ReactScrollView", "onLayoutChange:");
     int currentScrollY = getScrollY();
     int maxScrollY = getMaxScrollY();
 
@@ -758,6 +751,5 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   @Override
   public void onViewAdded(View child) {
     super.onViewAdded(child);
-    Log.e("ReactScrollView", "onViewAdded:" + child);
   }
 }
