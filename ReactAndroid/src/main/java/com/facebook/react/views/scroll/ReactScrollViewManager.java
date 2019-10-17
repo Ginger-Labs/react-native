@@ -168,11 +168,13 @@ public class ReactScrollViewManager
 
   @ReactProp(name = "nestedScrollEnabled")
   public void setNestedScrollEnabled(ReactScrollView view, boolean value) {
+    Log.e(this.getClass().getSimpleName(), "setNestedScrollEnabled: " + value);
     ViewCompat.setNestedScrollingEnabled(view, value);
   }
 
   @ReactProp(name = "chatBehavior")
   public void setChatBehavior(ReactScrollView view, boolean value) {
+    Log.e(this.getClass().getSimpleName(), "setChatBehavior: " + value);
     view.setChatBehavior(value);
   }
 

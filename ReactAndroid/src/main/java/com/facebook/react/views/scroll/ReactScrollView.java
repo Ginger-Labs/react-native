@@ -718,12 +718,12 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     if (currentScrollY > maxScrollY) {
       scrollTo(getScrollX(), maxScrollY);
     }
+    int viewportHeight = getHeight() - getPaddingBottom() - getPaddingTop();
 
-    if (mChatBehavior && (maxScrollY - currentScrollY) - Math.abs(bottom - oldBottom) == 0) {
+    if (mChatBehavior && (currentScrollY + viewportHeight == mContentView.getHeight() - (bottom - oldBottom))) {
       smoothScrollTo(getScrollX(), maxScrollY);
     }
   }
-
 
   public void setChatBehavior(boolean chatBehavior) {
     Log.e(this.getClass().getSimpleName(), "setChatBehavior: " + chatBehavior);
