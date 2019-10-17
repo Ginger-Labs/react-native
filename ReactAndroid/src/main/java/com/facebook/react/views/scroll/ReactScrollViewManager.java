@@ -198,6 +198,8 @@ public class ReactScrollViewManager
       return;
     }
     int scrollTo = child.getBottom();
+    Log.e(this.getName(), "scrollToIndex: scrollTo: " + scrollTo + ", child: " + child.toString());
+    Log.e(this.getName(), "scrollToIndex: scrollView.getHeight(): " + scrollView.getHeight());
     if (animated) {
       scrollView.smoothScrollTo(0, scrollTo);
     } else {
