@@ -718,12 +718,15 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       return;
     }
     Log.e("ReactScrollView", "onLayoutChange:");
-    int viewportHeight = getHeight() - getPaddingBottom() - getPaddingTop();
     int currentScrollY = getScrollY();
     int maxScrollY = getMaxScrollY();
 
-    if (currentScrollY > maxScrollY || mContentView.getHeight() - viewportHeight - getScrollY() < 100) {
+    if (currentScrollY > maxScrollY) {
       scrollTo(getScrollX(), maxScrollY);
+    }
+
+    if ((maxScrollY - currentScrollY) - Math.abs(bottom - oldBottom) < 100) {
+      smoothScrollTo(getScrollX(), maxScrollY);
     }
   }
 
