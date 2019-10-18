@@ -168,13 +168,11 @@ public class ReactScrollViewManager
 
   @ReactProp(name = "nestedScrollEnabled")
   public void setNestedScrollEnabled(ReactScrollView view, boolean value) {
-    Log.e(this.getClass().getSimpleName(), "setNestedScrollEnabled: " + value);
     ViewCompat.setNestedScrollingEnabled(view, value);
   }
 
   @ReactProp(name = "chatBehavior")
   public void setChatBehavior(ReactScrollView view, boolean value) {
-    Log.e(this.getClass().getSimpleName(), "setChatBehavior: " + value);
     view.setChatBehavior(value);
   }
 
@@ -198,15 +196,14 @@ public class ReactScrollViewManager
 
   @Override
   public void scrollToIndex(ReactScrollView scrollView, int index, boolean animated) {
-    Log.e(this.getName(), "scrollToIndex: index:" + index);
+    // This is to make sure we include the header too.
+    index = index + 1;
     View child = getSubChildAtTotalIndex(scrollView, index);
     if (child == null) {
       Log.e(this.getName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
       return;
     }
     int scrollTo = child.getBottom();
-    Log.e(this.getName(), "scrollToIndex: scrollTo: " + scrollTo + ", child: " + child.toString());
-    Log.e(this.getName(), "scrollToIndex: content height: " + scrollView.getContentView().getHeight());
     if (animated) {
       scrollView.smoothScrollTo(0, scrollTo);
     } else {
