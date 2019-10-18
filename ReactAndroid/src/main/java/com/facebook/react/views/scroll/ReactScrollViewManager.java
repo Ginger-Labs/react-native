@@ -13,6 +13,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
@@ -176,7 +177,7 @@ public class ReactScrollViewManager
   }
 
   @ReactProp(name = "maintainVisibleContentPosition")
-  public void setMaintainVisibleContentPosition(ReactScrollView view, ReadableNativeMap value) {
+  public void setMaintainVisibleContentPosition(ReactScrollView view, ReadableMap value) {
     int minIndexForVisible = value.getInt("minIndexForVisible");
     Log.e(this.getClass().getSimpleName(), "setMaintainVisibleContentPosition: " + minIndexForVisible);
     view.setMaintainVisibleContentPosition(value);

@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.events.NativeGestureUtil;
@@ -74,7 +75,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   private View mContentView;
   private ReactViewBackgroundManager mReactBackgroundManager;
   private boolean mChatBehavior = false;
-  private ReadableNativeMap mMaintainVisibleContentPosition;
+  private ReadableMap mMaintainVisibleContentPosition;
 
   public ReactScrollView(ReactContext context) {
     this(context, null);
@@ -779,7 +780,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     mChatBehavior = chatBehavior;
   }
 
-  public void setMaintainVisibleContentPosition(ReadableNativeMap maintainVisibleContentPosition) {
+  public void setMaintainVisibleContentPosition(ReadableMap maintainVisibleContentPosition) {
     mMaintainVisibleContentPosition = maintainVisibleContentPosition;
   }
 
