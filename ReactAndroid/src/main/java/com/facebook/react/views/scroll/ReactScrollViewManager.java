@@ -176,6 +176,11 @@ public class ReactScrollViewManager
     view.setChatBehavior(value);
   }
 
+  @ReactProp(name = "maintainVisibleContentPosition")
+  public void setMaintainVisibleContentPosition(ReactScrollView view, boolean value) {
+    Log.e(this.getClass().getSimpleName(), "setMaintainVisibleContentPosition: " + value);
+  }
+
   @Override
   public @Nullable Map<String, Integer> getCommandsMap() {
     return ReactScrollViewCommandHelper.getCommandsMap();
