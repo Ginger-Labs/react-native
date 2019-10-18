@@ -196,15 +196,46 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    if (oldh != 0) {
+      if (h < oldh) {
+        scrollTo(getScrollX(), getMaxScrollY());
+      } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
+        int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
+        Log.e(getClass().getSimpleName(), "onLayoutChange: mMaintainVisibleContentPosition: " + minIndexForVisible);
+        int index = getIndexOfFirstVisibleView(minIndexForVisible);
+        scrollToIndex(index, false);
+      }
+    }
     super.onSizeChanged(w, h, oldw, oldh);
     Log.e(getClass().getSimpleName(), "onSizeChanged: w: " + w + ", h: " + h + ", oldw: "  + oldw + ", oldh: " + oldh);
     if (mRemoveClippedSubviews) {
       updateClippingRect();
     }
+  }
 
-    if (oldh != 0 && h < oldh) {
-      scrollTo(getScrollX(), getMaxScrollY());
+  // Do not use minIndexForVisible for now, it's 0 anyways.
+  private int getIndexOfFirstVisibleView(int minIndexForVisible) {
+    int scrollY = getScrollY();
+    int groupCount = getChildCount();
+    int heightCount = 0;
+    int indexCount = 0;
+    // Iterate the groups.
+    for (int i = 0; i < groupCount; i++) {
+      ReactViewGroup group = (ReactViewGroup) getChildAt(i);
+      int childCount = group.getChildCount();
+      // Iterate the inner groups.
+      for (int j = 0; j < childCount; j++){
+        if (heightCount > scrollY) {
+          return indexCount;
+        } else {
+          heightCount += group.getChildAt(j).getHeight();
+          indexCount++;
+        }
+      }
     }
+    Log.e(getClass().getSimpleName(), "getIndexOfFirstVisibleView: Did not find the visible view, returning last index.");
+    // Return last one as default, scroll to bottom.
+    return indexCount;
   }
 
   @Override
@@ -764,11 +795,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       scrollTo(getScrollX(), maxScrollY);
     }
 
-    if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
-      int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
-      Log.e(getClass().getSimpleName(), "onLayoutChange: mMaintainVisibleContentPosition: " + minIndexForVisible);
-      scrollToIndex(minIndexForVisible, false);
-    } else if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
+   if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
       Log.e(getClass().getSimpleName(), "onLayoutChange: mChatBehavior: " + maxScrollY);
       smoothScrollTo(getScrollX(), maxScrollY);
     }
