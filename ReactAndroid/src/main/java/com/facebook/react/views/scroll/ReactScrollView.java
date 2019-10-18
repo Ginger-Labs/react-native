@@ -201,8 +201,8 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
         scrollTo(getScrollX(), getMaxScrollY());
       } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
         int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
-        Log.e(getClass().getSimpleName(), "onLayoutChange: mMaintainVisibleContentPosition: " + minIndexForVisible);
         int index = getIndexOfFirstVisibleView(minIndexForVisible);
+        Log.e(getClass().getSimpleName(), "onLayoutChange: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
         scrollToIndex(index, false);
       }
     }
