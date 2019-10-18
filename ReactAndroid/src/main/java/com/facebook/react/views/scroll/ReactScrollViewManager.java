@@ -178,8 +178,6 @@ public class ReactScrollViewManager
 
   @ReactProp(name = "maintainVisibleContentPosition")
   public void setMaintainVisibleContentPosition(ReactScrollView view, ReadableMap value) {
-    int minIndexForVisible = value.getInt("minIndexForVisible");
-    Log.e(this.getClass().getSimpleName(), "setMaintainVisibleContentPosition: " + minIndexForVisible);
     view.setMaintainVisibleContentPosition(value);
   }
 
