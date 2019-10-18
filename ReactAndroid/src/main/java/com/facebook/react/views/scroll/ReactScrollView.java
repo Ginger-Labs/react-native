@@ -22,6 +22,7 @@ import android.widget.ScrollView;
 
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.events.NativeGestureUtil;
 import com.facebook.react.uimanager.MeasureSpecAssertions;
@@ -29,6 +30,7 @@ import com.facebook.react.uimanager.ReactClippingViewGroup;
 import com.facebook.react.uimanager.ReactClippingViewGroupHelper;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.views.view.ReactViewBackgroundManager;
+import com.facebook.react.views.view.ReactViewGroup;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -72,6 +74,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   private View mContentView;
   private ReactViewBackgroundManager mReactBackgroundManager;
   private boolean mChatBehavior = false;
+  private ReadableNativeMap mMaintainVisibleContentPosition;
 
   public ReactScrollView(ReactContext context) {
     this(context, null);
@@ -694,6 +697,41 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
   }
 
+  public void scrollToIndex(int index, boolean animated) {
+    // This is to make sure we include the header too.
+    index = index + 1;
+    View child = getSubChildAtTotalIndex(index);
+    if (child == null) {
+      Log.e(getClass().getSimpleName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
+      return;
+    }
+    int scrollTo = child.getBottom();
+    if (animated) {
+      smoothScrollTo(0, scrollTo);
+    } else {
+      scrollTo(0, scrollTo);
+    }
+  }
+
+  private View getSubChildAtTotalIndex(int index) {
+    int groupCount = getChildCount();
+    int count = 0;
+    // Iterate the groups.
+    for (int i = 0; i < groupCount; i++) {
+      ReactViewGroup group = (ReactViewGroup) getChildAt(i);
+      int childCount = group.getChildCount();
+      // Iterate the inner groups.
+      for (int j = 0; j < childCount; j++){
+        if (count == index) {
+          return group.getChildAt(j);
+        } else {
+          count++;
+        }
+      }
+    }
+    return null;
+  }
+
   @Override
   public void onChildViewAdded(View parent, View child) {
     mContentView = child;
@@ -723,7 +761,10 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       scrollTo(getScrollX(), maxScrollY);
     }
 
-    if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
+    if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
+      int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
+      scrollToIndex(minIndexForVisible, false);
+    } else if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
       smoothScrollTo(getScrollX(), maxScrollY);
     }
   }
@@ -736,6 +777,10 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
   public void setChatBehavior(boolean chatBehavior) {
     mChatBehavior = chatBehavior;
+  }
+
+  public void setMaintainVisibleContentPosition(ReadableNativeMap maintainVisibleContentPosition) {
+    mMaintainVisibleContentPosition = maintainVisibleContentPosition;
   }
 
   @Override

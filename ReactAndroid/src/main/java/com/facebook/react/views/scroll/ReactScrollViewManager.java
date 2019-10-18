@@ -11,9 +11,9 @@ import android.graphics.Color;
 import androidx.core.view.ViewCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
 
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -25,7 +25,6 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.ViewProps;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
-import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.yoga.YogaConstants;
 
 import java.util.ArrayList;
@@ -177,8 +176,10 @@ public class ReactScrollViewManager
   }
 
   @ReactProp(name = "maintainVisibleContentPosition")
-  public void setMaintainVisibleContentPosition(ReactScrollView view, boolean value) {
-    Log.e(this.getClass().getSimpleName(), "setMaintainVisibleContentPosition: " + value);
+  public void setMaintainVisibleContentPosition(ReactScrollView view, ReadableNativeMap value) {
+    int minIndexForVisible = value.getInt("minIndexForVisible");
+    Log.e(this.getClass().getSimpleName(), "setMaintainVisibleContentPosition: " + minIndexForVisible);
+    view.setMaintainVisibleContentPosition(value);
   }
 
   @Override
@@ -201,38 +202,7 @@ public class ReactScrollViewManager
 
   @Override
   public void scrollToIndex(ReactScrollView scrollView, int index, boolean animated) {
-    // This is to make sure we include the header too.
-    index = index + 1;
-    View child = getSubChildAtTotalIndex(scrollView, index);
-    if (child == null) {
-      Log.e(this.getName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
-      return;
-    }
-    int scrollTo = child.getBottom();
-    if (animated) {
-      scrollView.smoothScrollTo(0, scrollTo);
-    } else {
-      scrollView.scrollTo(0, scrollTo);
-    }
-  }
-
-  private View getSubChildAtTotalIndex(ReactScrollView scrollView, int index) {
-    int groupCount = scrollView.getChildCount();
-    int count = 0;
-    // Iterate the groups.
-    for (int i = 0; i < groupCount; i++) {
-      ReactViewGroup group = (ReactViewGroup) scrollView.getChildAt(i);
-      int childCount = group.getChildCount();
-      // Iterate the inner groups.
-      for (int j = 0; j < childCount; j++){
-        if (count == index) {
-          return group.getChildAt(j);
-        } else {
-          count++;
-        }
-      }
-    }
-    return null;
+    scrollView.scrollToIndex(index, animated);
   }
 
   @Override
