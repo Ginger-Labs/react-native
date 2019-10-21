@@ -1,6 +1,6 @@
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
- *
+ * <p>
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
@@ -12,7 +12,9 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+
 import androidx.core.view.ViewCompat;
+
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,7 +25,6 @@ import android.widget.ScrollView;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.common.ReactConstants;
 import com.facebook.react.uimanager.events.NativeGestureUtil;
 import com.facebook.react.uimanager.MeasureSpecAssertions;
@@ -35,6 +36,7 @@ import com.facebook.react.views.view.ReactViewGroup;
 
 import java.lang.reflect.Field;
 import java.util.List;
+
 import javax.annotation.Nullable;
 
 /**
@@ -46,30 +48,39 @@ import javax.annotation.Nullable;
  */
 public class ReactScrollView extends ScrollView implements ReactClippingViewGroup, ViewGroup.OnHierarchyChangeListener, View.OnLayoutChangeListener {
 
-  private static @Nullable Field sScrollerField;
+  private static @Nullable
+  Field sScrollerField;
   private static boolean sTriedToGetScrollerField = false;
 
   private final OnScrollDispatchHelper mOnScrollDispatchHelper = new OnScrollDispatchHelper();
-  private final @Nullable OverScroller mScroller;
+  private final @Nullable
+  OverScroller mScroller;
   private final VelocityHelper mVelocityHelper = new VelocityHelper();
   private final Rect mRect = new Rect(); // for reuse to avoid allocation
 
   private boolean mActivelyScrolling;
-  private @Nullable Rect mClippingRect;
-  private @Nullable String mOverflow = ViewProps.HIDDEN;
+  private @Nullable
+  Rect mClippingRect;
+  private @Nullable
+  String mOverflow = ViewProps.HIDDEN;
   private boolean mDragging;
   private boolean mPagingEnabled = false;
-  private @Nullable Runnable mPostTouchRunnable;
+  private @Nullable
+  Runnable mPostTouchRunnable;
   private boolean mRemoveClippedSubviews;
   private boolean mScrollEnabled = true;
   private boolean mSendMomentumEvents;
-  private @Nullable FpsListener mFpsListener = null;
-  private @Nullable String mScrollPerfTag;
-  private @Nullable Drawable mEndBackground;
+  private @Nullable
+  FpsListener mFpsListener = null;
+  private @Nullable
+  String mScrollPerfTag;
+  private @Nullable
+  Drawable mEndBackground;
   private int mEndFillColor = Color.TRANSPARENT;
   private int mSnapInterval = 0;
   private float mDecelerationRate = 0.985f;
-  private @Nullable List<Integer> mSnapOffsets;
+  private @Nullable
+  List<Integer> mSnapOffsets;
   private boolean mSnapToStart = true;
   private boolean mSnapToEnd = true;
   private View mContentView;
@@ -184,8 +195,8 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     MeasureSpecAssertions.assertExplicitMeasureSpec(widthMeasureSpec, heightMeasureSpec);
 
     setMeasuredDimension(
-        MeasureSpec.getSize(widthMeasureSpec),
-        MeasureSpec.getSize(heightMeasureSpec));
+      MeasureSpec.getSize(widthMeasureSpec),
+      MeasureSpec.getSize(heightMeasureSpec));
   }
 
   @Override
@@ -196,7 +207,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    Log.e(getClass().getSimpleName(), "onSizeChanged: w: " + w + ", h: " + h + ", oldw: "  + oldw + ", oldh: " + oldh);
+    Log.e(getClass().getSimpleName(), "onSizeChanged: w: " + w + ", h: " + h + ", oldw: " + oldw + ", oldh: " + oldh);
     if (oldh != 0) {
       if (h < oldh) {
         scrollTo(getScrollX(), getMaxScrollY());
@@ -216,21 +227,19 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   // Do not use minIndexForVisible for now, it's 0 anyways.
   private int getIndexOfFirstVisibleView(int minIndexForVisible) {
     int scrollY = getScrollY();
-    int groupCount = getChildCount();
     int heightCount = 0;
     int indexCount = 0;
-    // Iterate the groups.
-    for (int i = 0; i < groupCount; i++) {
-      ReactViewGroup group = (ReactViewGroup) getChildAt(i);
-      int childCount = group.getChildCount();
+
+    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
+
+    for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
+      View child = contentViewGroup.getChildAt(i);
       // Iterate the inner groups.
-      for (int j = 0; j < childCount; j++){
-        if (heightCount > scrollY) {
-          return indexCount;
-        } else {
-          heightCount += group.getChildAt(j).getHeight();
-          indexCount++;
-        }
+      if (heightCount > scrollY) {
+        return indexCount;
+      } else {
+        heightCount += child.getHeight();
+        indexCount++;
       }
     }
     Log.e(getClass().getSimpleName(), "getIndexOfFirstVisibleView: Did not find the visible view, returning last index.");
@@ -249,7 +258,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   @Override
   protected void onScrollChanged(int x, int y, int oldX, int oldY) {
     super.onScrollChanged(x, y, oldX, oldY);
-    Log.e("ReactScrollView: ", "onScrollChanged: " + x + " x " + y + ", old: "  + oldX + " x " + oldY);
+    Log.e("ReactScrollView: ", "onScrollChanged: " + x + " x " + y + ", old: " + oldX + " x " + oldY);
     mActivelyScrolling = true;
 
     if (mOnScrollDispatchHelper.onScrollChanged(x, y)) {
@@ -357,7 +366,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     if (signum == 0) {
       signum = Math.signum(velocityY);
     }
-    final int correctedVelocityY = (int)(Math.abs(velocityY) * signum);
+    final int correctedVelocityY = (int) (Math.abs(velocityY) * signum);
 
     if (mPagingEnabled) {
       flingAndSnap(correctedVelocityY);
@@ -420,7 +429,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     return Math.max(0, contentHeight - viewportHeight);
   }
 
-  public View getContentView(){
+  public View getContentView() {
     return mContentView;
   }
 
@@ -525,7 +534,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       0, // minY
       maximumOffset, // maxY
       0, // overX
-      height/2 // overY
+      height / 2 // overY
     );
     return scroller.getFinalY();
   }
@@ -546,28 +555,27 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     int targetPage = (int) Math.round(targetOffset / interval);
 
     if (velocity > 0 && nextPage == previousPage) {
-      nextPage ++;
+      nextPage++;
     } else if (velocity < 0 && previousPage == nextPage) {
-      previousPage --;
+      previousPage--;
     }
 
     if (
       // if scrolling towards next page
       velocity > 0 &&
-      // and the middle of the page hasn't been crossed already
-      currentPage < nextPage &&
-      // and it would have been crossed after flinging
-      targetPage > previousPage
+        // and the middle of the page hasn't been crossed already
+        currentPage < nextPage &&
+        // and it would have been crossed after flinging
+        targetPage > previousPage
     ) {
       currentPage = nextPage;
-    }
-    else if (
+    } else if (
       // if scrolling towards previous page
       velocity < 0 &&
-      // and the middle of the page hasn't been crossed already
-      currentPage > previousPage &&
-      // and it would have been crossed after flinging
-      targetPage < nextPage
+        // and the middle of the page hasn't been crossed already
+        currentPage > previousPage &&
+        // and it would have been crossed after flinging
+        targetPage < nextPage
     ) {
       currentPage = previousPage;
     }
@@ -603,7 +611,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       firstOffset = mSnapOffsets.get(0);
       lastOffset = mSnapOffsets.get(mSnapOffsets.size() - 1);
 
-      for (int i = 0; i < mSnapOffsets.size(); i ++) {
+      for (int i = 0; i < mSnapOffsets.size(); i++) {
         int offset = mSnapOffsets.get(i);
 
         if (offset <= targetOffset) {
@@ -733,7 +741,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   public void scrollToIndex(int index, boolean animated) {
     // This is to make sure we include the header too.
     index = index + 1;
-    View child = getSubChildAtTotalIndex(index);
+    View child = getChildAtIndex(index);
     if (child == null) {
       Log.e(getClass().getSimpleName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
       return;
@@ -746,23 +754,10 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     }
   }
 
-  private View getSubChildAtTotalIndex(int index) {
-    int groupCount = getChildCount();
-    int count = 0;
-    // Iterate the groups.
-    for (int i = 0; i < groupCount; i++) {
-      ReactViewGroup group = (ReactViewGroup) getChildAt(i);
-      int childCount = group.getChildCount();
-      // Iterate the inner groups.
-      for (int j = 0; j < childCount; j++){
-        if (count == index) {
-          return group.getChildAt(j);
-        } else {
-          count++;
-        }
-      }
-    }
-    return null;
+  private View getChildAtIndex(int index) {
+    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
+    Log.e(this.getClass().getSimpleName(), "getChildAtIndex: " + index + " out of " + contentViewGroup.getChildCount());
+    return contentViewGroup.getChildAt(index);
   }
 
   @Override
@@ -795,7 +790,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       scrollTo(getScrollX(), maxScrollY);
     }
 
-   if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
+    if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
       Log.e(getClass().getSimpleName(), "onLayoutChange: mChatBehavior: " + maxScrollY);
       smoothScrollTo(getScrollX(), maxScrollY);
     }
