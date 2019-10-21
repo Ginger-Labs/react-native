@@ -745,7 +745,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       Log.e(getClass().getSimpleName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
       return;
     }
-    int scrollTo = child.getBottom();
+    int scrollTo = child.getTop();
     if (animated) {
       smoothScrollTo(0, scrollTo);
     } else {
