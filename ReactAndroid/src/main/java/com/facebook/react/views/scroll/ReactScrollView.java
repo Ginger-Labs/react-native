@@ -745,7 +745,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       Log.e(getClass().getSimpleName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
       return;
     }
-    int scrollTo = child.getBottom();
+    int scrollTo = child.getTop();
     if (animated) {
       smoothScrollTo(0, scrollTo);
     } else {
@@ -754,6 +754,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   }
 
   private View getChildAtIndex(int index) {
+    index = index + 1;
     ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
     Log.e(this.getClass().getSimpleName(), "getChildAtIndex: " + index + " out of " + contentViewGroup.getChildCount());
     return contentViewGroup.getChildAt(index);
