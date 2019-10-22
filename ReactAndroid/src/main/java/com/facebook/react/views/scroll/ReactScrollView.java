@@ -754,7 +754,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   }
 
   private View getChildAtIndex(int index) {
-    index = index + 1;
     ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
     Log.e(this.getClass().getSimpleName(), "getChildAtIndex: " + index + " out of " + contentViewGroup.getChildCount());
     return contentViewGroup.getChildAt(index);
