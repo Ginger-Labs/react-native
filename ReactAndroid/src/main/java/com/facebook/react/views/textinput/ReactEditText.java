@@ -90,8 +90,6 @@ public class ReactEditText extends EditText {
     super(context);
     setFocusableInTouchMode(false);
 
-    Log.e("ReactEditText: ", "Test HELLO!");
-
     mReactBackgroundManager = new ReactViewBackgroundManager(this);
     mInputMethodManager = (InputMethodManager)
         Assertions.assertNotNull(getContext().getSystemService(Context.INPUT_METHOD_SERVICE));

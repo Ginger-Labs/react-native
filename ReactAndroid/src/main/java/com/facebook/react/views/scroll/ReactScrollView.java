@@ -782,6 +782,14 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       return;
     }
 
+    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
+
+    for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
+      View child = contentViewGroup.getChildAt(i);
+      int color = i % 2 == 0 ? Color.RED : Color.GREEN;
+      child.setBackgroundColor(color);
+    }
+
     int maxScrollY = getMaxScrollY();
 
     if (getScrollY() > maxScrollY) {
