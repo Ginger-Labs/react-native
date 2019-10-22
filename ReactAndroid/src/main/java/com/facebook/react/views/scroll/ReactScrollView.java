@@ -207,9 +207,9 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    Log.e(getClass().getSimpleName(), "onSizeChanged: w: " + w + ", h: " + h + ", oldw: " + oldw + ", oldh: " + oldh);
     if (oldh != 0) {
       if (h < oldh) {
+        Log.e(getClass().getSimpleName(), "onSizeChanged (h < oldh) : w: " + w + ", h: " + h + ", oldw: " + oldw + ", oldh: " + oldh);
         scrollTo(getScrollX(), getMaxScrollY());
       } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
         int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
@@ -258,7 +258,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   @Override
   protected void onScrollChanged(int x, int y, int oldX, int oldY) {
     super.onScrollChanged(x, y, oldX, oldY);
-    Log.e("ReactScrollView: ", "onScrollChanged: " + x + " x " + y + ", old: " + oldX + " x " + oldY);
+    Log.w("ReactScrollView: ", "onScrollChanged: " + x + " x " + y + ", old: " + oldX + " x " + oldY);
     mActivelyScrolling = true;
 
     if (mOnScrollDispatchHelper.onScrollChanged(x, y)) {
@@ -745,7 +745,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
       Log.e(getClass().getSimpleName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
       return;
     }
-    int scrollTo = child.getTop();
+    int scrollTo = child.getBottom();
     if (animated) {
       smoothScrollTo(0, scrollTo);
     } else {
