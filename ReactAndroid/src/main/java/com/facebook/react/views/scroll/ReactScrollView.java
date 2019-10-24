@@ -797,7 +797,10 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
     if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
       Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
+      int mode = getOverScrollMode();
+      setOverScrollMode(OVER_SCROLL_NEVER);
       smoothScrollTo(getScrollX(), maxScrollY);
+      setOverScrollMode(mode);
     }
   }
 
