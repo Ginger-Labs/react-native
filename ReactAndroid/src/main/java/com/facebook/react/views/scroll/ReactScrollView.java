@@ -209,12 +209,11 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     if (oldh != 0) {
       if (h < oldh) {
-        Log.e(getClass().getSimpleName(), "onSizeChanged (h < oldh) : w: " + w + ", h: " + h + ", oldw: " + oldw + ", oldh: " + oldh);
         scrollTo(getScrollX(), getMaxScrollY());
       } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
         int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
         int index = getIndexOfFirstVisibleView(minIndexForVisible);
-        Log.e(getClass().getSimpleName(), "onSizeChanged: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
+        Log.d(getClass().getSimpleName(), "onSizeChanged: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
         scrollToIndex(index, false);
       }
     }
@@ -258,7 +257,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   @Override
   protected void onScrollChanged(int x, int y, int oldX, int oldY) {
     super.onScrollChanged(x, y, oldX, oldY);
-    Log.w("ReactScrollView: ", "onScrollChanged: " + x + " x " + y + ", old: " + oldX + " x " + oldY);
     mActivelyScrolling = true;
 
     if (mOnScrollDispatchHelper.onScrollChanged(x, y)) {
@@ -755,7 +753,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
 
   private View getChildAtIndex(int index) {
     ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
-    Log.e(this.getClass().getSimpleName(), "getChildAtIndex: " + index + " out of " + contentViewGroup.getChildCount());
     return contentViewGroup.getChildAt(index);
   }
 
@@ -795,12 +792,11 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     int maxScrollY = getMaxScrollY();
 
     if (getScrollY() > maxScrollY) {
-      Log.e(getClass().getSimpleName(), "onLayoutChange: getScrollY() > maxScrollY: " + maxScrollY);
       scrollTo(getScrollX(), maxScrollY);
     }
 
     if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
-      Log.e(getClass().getSimpleName(), "onLayoutChange: mChatBehavior: " + maxScrollY);
+      Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
       smoothScrollTo(getScrollX(), maxScrollY);
     }
   }
