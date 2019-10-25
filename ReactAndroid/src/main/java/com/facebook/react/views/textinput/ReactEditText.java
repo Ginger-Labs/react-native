@@ -613,7 +613,7 @@ public class ReactEditText extends EditText {
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
     try {
-      Log.e("onAttachedToWindow", "Re-enabling..");
+      Log.d("onAttachedToWindow", "Re-enabling..");
       super.setEnabled(false);
       super.setEnabled(true);
     } catch (Exception e) {

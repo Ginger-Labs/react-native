@@ -18,6 +18,7 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -176,7 +177,7 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
           placeholderHorizontalPosition = characterAndParagraphDirectionMatch
             ? (int) layout.getPrimaryHorizontal(start)
             : (int) layout.getSecondaryHorizontal(start);
-          
+
           if (isRtlParagraph) {
             // Adjust `placeholderHorizontalPosition` to work around an Android bug.
             // The bug is when the paragraph is RTL and `setSingleLine(true)`, some layout
@@ -392,6 +393,15 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
   @Override
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
+
+    try {
+      Log.d("onAttachedToWindow", "Re-enabling..");
+      super.setEnabled(false);
+      super.setEnabled(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     if (mContainsImages && getText() instanceof Spanned) {
       Spanned text = (Spanned) getText();
       TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
