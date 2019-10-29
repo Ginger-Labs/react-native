@@ -117,7 +117,6 @@ public class ReactEditText extends EditText {
         && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
       setLayerType(View.LAYER_TYPE_SOFTWARE, null);
       }
-    setScrollContainer(true);
   }
 
   // After the text changes inside an EditText, TextView checks if a layout() has been requested.
