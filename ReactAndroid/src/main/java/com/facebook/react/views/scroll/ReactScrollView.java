@@ -208,7 +208,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     if (oldh != 0) {
-      if (h < oldh) {
+      if (mChatBehavior && h < oldh) {
         Log.d(this.getClass().getSimpleName(), "h < old");
         scrollTo(getScrollX(), getMaxScrollY());
       } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
