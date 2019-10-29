@@ -738,7 +738,6 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   }
 
   public void scrollToIndex(int index, boolean animated) {
-    if (!mChatBehavior) return;
     // This is to make sure we include the header too.
     View child = getChildAtIndex(index);
     if (child == null) {
