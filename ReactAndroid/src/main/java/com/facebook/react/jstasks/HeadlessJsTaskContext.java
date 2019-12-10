@@ -91,9 +91,10 @@ public class HeadlessJsTaskContext {
       "Tried to start a task on a react context that has already been destroyed");
     if (reactContext.getLifecycleState() == LifecycleState.RESUMED &&
       !taskConfig.isAllowedInForeground()) {
-      throw new IllegalStateException(
-        "Tried to start task " + taskConfig.getTaskKey() +
-          " while in foreground, but this is not allowed.");
+//      throw new IllegalStateException(
+//        "Tried to start task " + taskConfig.getTaskKey() +
+//          " while in foreground, but this is not allowed.");
+      return;
     }
     final int taskId = mLastTaskId.incrementAndGet();
     mActiveTasks.add(taskId);
