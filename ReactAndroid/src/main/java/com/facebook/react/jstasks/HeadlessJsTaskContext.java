@@ -94,7 +94,7 @@ public class HeadlessJsTaskContext {
 //      throw new IllegalStateException(
 //        "Tried to start task " + taskConfig.getTaskKey() +
 //          " while in foreground, but this is not allowed.");
-      return;
+      return 0;
     }
     final int taskId = mLastTaskId.incrementAndGet();
     mActiveTasks.add(taskId);
