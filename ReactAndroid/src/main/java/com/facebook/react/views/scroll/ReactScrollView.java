@@ -738,6 +738,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
   }
 
   public void scrollToIndex(int index, boolean animated) {
+    Log.d(getClass().getSimpleName(), "scrollToIndex: " + index + ", anim: " + animated);
     // This is to make sure we include the header too.
     View child = getChildAtIndex(index);
     if (child == null) {
@@ -793,7 +794,7 @@ public class ReactScrollView extends ScrollView implements ReactClippingViewGrou
     int maxScrollY = getMaxScrollY();
 
     if (getScrollY() > maxScrollY) {
-      Log.e(getClass().getSimpleName(), "getScrollY() > maxScrollY");
+      Log.d(getClass().getSimpleName(), "getScrollY() > maxScrollY");
       scrollTo(getScrollX(), maxScrollY);
     }
 
