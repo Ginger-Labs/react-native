@@ -5,13 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RCTUITextField.h"
+#import <React/RCTUITextField.h>
 
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
 
-#import "RCTBackedTextInputDelegateAdapter.h"
-#import "RCTTextAttributes.h"
+#import <React/RCTBackedTextInputDelegateAdapter.h>
+#import <React/RCTTextAttributes.h>
 
 @implementation RCTUITextField {
   RCTBackedTextFieldDelegateAdapter *_textInputDelegateAdapter;
@@ -175,6 +175,16 @@
 }
 
 #pragma mark - Overrides
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+// Overrides selectedTextRange setter to get notify when selectedTextRange changed.
+- (void)setSelectedTextRange:(UITextRange *)selectedTextRange
+{
+  [super setSelectedTextRange:selectedTextRange];
+  [_textInputDelegateAdapter selectedTextRangeWasSet];
+}
+#pragma clang diagnostic pop
 
 - (void)setSelectedTextRange:(UITextRange *)selectedTextRange notifyDelegate:(BOOL)notifyDelegate
 {

@@ -64,13 +64,12 @@ plugins {
  */
 
 project.ext.react = [
-    cliPath: "$rootDir/cli.js",
     bundleAssetName: "RNTesterApp.android.bundle",
     entryFile: file("../../js/RNTesterApp.android.js"),
     root: "$rootDir",
     inputExcludes: ["android/**", "./**", ".gradle/**"],
     composeSourceMapsPath: "$rootDir/scripts/compose-source-maps.js",
-    hermesCommand: "../../../node_modules/hermesvm/%OS-BIN%/hermes",
+    hermesCommand: "../../../node_modules/hermes-engine/%OS-BIN%/hermes",
     enableHermesForVariant: { def v -> v.name.contains("hermes") }
 ]
 
@@ -110,12 +109,12 @@ android {
 
     flavorDimensions "vm"
     productFlavors {
-      hermes {
-        dimension "vm"
-      }
-      jsc {
-        dimension "vm"
-      }
+        hermes {
+            dimension "vm"
+        }
+        jsc {
+            dimension "vm"
+        }
     }
 
     defaultConfig {
@@ -150,13 +149,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+    
     }
     packagingOptions {
-        pickFirst '**/armeabi-v7a/libc++_shared.so'
-        pickFirst '**/x86/libc++_shared.so'
-        pickFirst '**/arm64-v8a/libc++_shared.so'
-        pickFirst '**/x86_64/libc++_shared.so'
-    }
+       pickFirst 'lib/x86/libc++_shared.so'
+       pickFirst 'lib/x86_64/libjsc.so'
+       pickFirst 'lib/arm64-v8a/libjsc.so'
+       pickFirst 'lib/arm64-v8a/libc++_shared.so'
+       pickFirst 'lib/x86_64/libc++_shared.so'
+       pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+   }
 }
 
 dependencies {
@@ -165,7 +167,7 @@ dependencies {
     // Build React Native from source
     implementation project(':ReactAndroid')
 
-    def hermesPath = '$projectDir/../../../../node_modules/hermesvm/android/'
+    def hermesPath = '$projectDir/../../../../node_modules/hermes-engine/android/'
     debugImplementation files(hermesPath + "hermes-debug.aar")
     releaseImplementation files(hermesPath + "hermes-release.aar")
 

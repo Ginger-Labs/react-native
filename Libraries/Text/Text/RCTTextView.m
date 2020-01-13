@@ -5,28 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "RCTTextView.h"
+#import <React/RCTTextView.h>
 
 #import <MobileCoreServices/UTCoreTypes.h>
 
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
 
-#import "RCTTextShadowView.h"
-#import "RCTTextRenderer.h"
-
-@interface RCTTextTiledLayer : CATiledLayer
-
-@end
-
-@implementation RCTTextTiledLayer
-
-+ (CFTimeInterval)fadeDuration
-{
-  return 0.05;
-}
-
-@end
+#import <React/RCTTextShadowView.h>
 
 @implementation RCTTextView
 {
@@ -294,7 +280,8 @@
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)gesture
 {
-#if !TARGET_OS_TV
+  // TODO: Adopt showMenuFromRect (necessary for UIKitForMac)
+#if !TARGET_OS_TV && !TARGET_OS_UIKITFORMAC
   UIMenuController *menuController = [UIMenuController sharedMenuController];
 
   if (menuController.isMenuVisible) {

@@ -1,8 +1,8 @@
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in the LICENSE
- * file in the root directory of this source tree.
+ * <p>This source code is licensed under the MIT license found in the LICENSE file in the root
+ * directory of this source tree.
  */
 package com.facebook.hermes.reactexecutor;
 
@@ -10,7 +10,6 @@ import com.facebook.hermes.instrumentation.HermesMemoryDumper;
 import com.facebook.jni.HybridData;
 import com.facebook.react.bridge.JavaScriptExecutor;
 import com.facebook.soloader.SoLoader;
-import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.Nullable;
 
 public class HermesExecutor extends JavaScriptExecutor {
@@ -21,7 +20,7 @@ public class HermesExecutor extends JavaScriptExecutor {
     try {
       SoLoader.loadLibrary("hermes-executor-release");
       mode_ = "Release";
-    } catch(UnsatisfiedLinkError e) {
+    } catch (UnsatisfiedLinkError e) {
       SoLoader.loadLibrary("hermes-executor-debug");
       mode_ = "Debug";
     }

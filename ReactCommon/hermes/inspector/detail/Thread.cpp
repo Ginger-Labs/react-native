@@ -15,7 +15,7 @@ struct Thread::Impl {
 };
 
 Thread::Thread(std::string, std::function<void()> runnable)
-  : impl_(std::make_unique<Impl>(Impl{facebook::jni::make_global(
+    : impl_(std::make_unique<Impl>(Impl{facebook::jni::make_global(
           facebook::jni::JThread::create(std::move(runnable)))})) {
   impl_->thread_->start();
 }
@@ -26,9 +26,9 @@ void Thread::join() {
   impl_->thread_->join();
 }
 
-}
-}
-}
-}
+} // namespace detail
+} // namespace inspector
+} // namespace hermes
+} // namespace facebook
 
 #endif

@@ -23,11 +23,11 @@ template class folly::Future<folly::Unit>;
 namespace folly {
 namespace futures {
 
-Future<Unit> sleep(Duration dur, Timekeeper* tk) {
+Future<Unit> sleep(Duration dur, Timekeeper *tk) {
   LOG(FATAL) << "folly::futures::sleep() not implemented";
 }
 
-}
+} // namespace futures
 
 namespace detail {
 
@@ -35,8 +35,8 @@ std::shared_ptr<Timekeeper> getTimekeeperSingleton() {
   LOG(FATAL) << "folly::detail::getTimekeeperSingleton() not implemented";
 }
 
-}
-}
+} // namespace detail
+} // namespace folly
 
 // </kludge>
 

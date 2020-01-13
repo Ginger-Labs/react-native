@@ -21,7 +21,6 @@ const ensurePositiveDelayProps = require('./ensurePositiveDelayProps');
 
 const {
   DeprecatedAccessibilityRoles,
-  DeprecatedAccessibilityStates,
 } = require('../../DeprecatedPropTypes/DeprecatedViewAccessibility');
 
 import type {
@@ -33,6 +32,9 @@ import type {EdgeInsetsProp} from '../../StyleSheet/EdgeInsetsPropType';
 import type {
   AccessibilityRole,
   AccessibilityStates,
+  AccessibilityState,
+  AccessibilityActionInfo,
+  AccessibilityActionEvent,
 } from '../View/ViewAccessibility';
 
 type TargetEvent = SyntheticEvent<
@@ -52,6 +54,9 @@ const OVERRIDE_PROPS = [
   'accessibilityIgnoresInvertColors',
   'accessibilityRole',
   'accessibilityStates',
+  'accessibilityState',
+  'accessibilityActions',
+  'onAccessibilityAction',
   'hitSlop',
   'nativeID',
   'onBlur',
@@ -67,6 +72,8 @@ export type Props = $ReadOnly<{|
   accessibilityIgnoresInvertColors?: ?boolean,
   accessibilityRole?: ?AccessibilityRole,
   accessibilityStates?: ?AccessibilityStates,
+  accessibilityState?: ?AccessibilityState,
+  accessibilityActions?: ?$ReadOnlyArray<AccessibilityActionInfo>,
   children?: ?React.Node,
   delayLongPress?: ?number,
   delayPressIn?: ?number,
@@ -82,6 +89,7 @@ export type Props = $ReadOnly<{|
   onPress?: ?(event: PressEvent) => mixed,
   onPressIn?: ?(event: PressEvent) => mixed,
   onPressOut?: ?(event: PressEvent) => mixed,
+  onAccessibilityAction?: ?(event: AccessibilityActionEvent) => void,
   pressRetentionOffset?: ?EdgeInsetsProp,
   rejectResponderTermination?: ?boolean,
   testID?: ?string,
@@ -104,9 +112,10 @@ const TouchableWithoutFeedback = ((createReactClass({
     accessibilityHint: PropTypes.string,
     accessibilityIgnoresInvertColors: PropTypes.bool,
     accessibilityRole: PropTypes.oneOf(DeprecatedAccessibilityRoles),
-    accessibilityStates: PropTypes.arrayOf(
-      PropTypes.oneOf(DeprecatedAccessibilityStates),
-    ),
+    accessibilityStates: PropTypes.array,
+    accessibilityState: PropTypes.object,
+    accessibilityActions: PropTypes.array,
+    onAccessibilityAction: PropTypes.func,
     /**
      * When `accessible` is true (which is the default) this may be called when
      * the OS-specific concept of "focus" occurs. Some platforms may not have
@@ -261,8 +270,8 @@ const TouchableWithoutFeedback = ((createReactClass({
     return (React: any).cloneElement(child, {
       ...overrides,
       accessible: this.props.accessible !== false,
-      clickable:
-        this.props.clickable !== false && this.props.onPress !== undefined,
+      focusable:
+        this.props.focusable !== false && this.props.onPress !== undefined,
       onClick: this.touchableHandlePress,
       onStartShouldSetResponder: this.touchableHandleStartShouldSetResponder,
       onResponderTerminationRequest: this
