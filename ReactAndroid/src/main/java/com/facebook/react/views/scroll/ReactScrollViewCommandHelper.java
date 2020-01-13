@@ -76,7 +76,7 @@ public class ReactScrollViewCommandHelper {
     Assertions.assertNotNull(args);
     switch (commandType) {
       case COMMAND_SCROLL_TO_INDEX: {
-        scrollToIndex(viewManager, scrollView, args)
+        scrollToIndex(viewManager, scrollView, args);
         return;
       }
       case COMMAND_SCROLL_TO:
