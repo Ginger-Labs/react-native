@@ -101,8 +101,6 @@ afterEvaluate {
 
         def enableHermes = enableHermesForVariant(variant)
 
-        def enableHermes = enableHermesForVariant(variant)
-
         def currentBundleTask = tasks.create(
             name: "bundle${targetName}JsAndAssets",
             type: Exec) {
