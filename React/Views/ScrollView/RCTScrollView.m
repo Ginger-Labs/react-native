@@ -387,6 +387,9 @@ RCT_NOT_IMPLEMENTED(- (instancetype)init)
 {
   RCTEventDispatcher *_eventDispatcher;
   CGRect _prevFirstVisibleFrame;
+  CGSize _prevContentSize;
+  CGPoint _prevContentOffset;
+  CGRect _prevFrame;
   __weak UIView *_firstVisibleView;
   RCTCustomScrollView *_scrollView;
   UIView *_contentView;
@@ -599,6 +602,20 @@ static inline void RCTApplyTransformationAccordingLayoutDirection(UIView *view, 
 - (BOOL)isHorizontal:(UIScrollView *)scrollView
 {
   return scrollView.contentSize.width > self.frame.size.width;
+}
+
+- (void)scrollToIndex:(NSInteger)index animated:(BOOL)animated {
+  UIView *subview = self->_contentView.subviews[index];
+  if (!subview) {
+    return;
+  }
+
+  if (self->_scrollView.contentSize.height <= self->_scrollView.frame.size.height) {
+    return;
+  }
+
+  CGFloat y = subview.frame.origin.y - 12;
+  [self scrollToOffset:CGPointMake(self->_scrollView.contentOffset.x, y) animated:animated];
 }
 
 - (void)scrollToOffset:(CGPoint)offset
@@ -1062,6 +1079,10 @@ RCT_SCROLL_EVENT_HANDLER(scrollViewDidScrollToTop, onScrollToTop)
   [manager prependUIBlock:^(__unused RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, UIView *> *viewRegistry) {
     BOOL horz = [self isHorizontal:self->_scrollView];
     NSUInteger minIdx = [self->_maintainVisibleContentPosition[@"minIndexForVisible"] integerValue];
+    self->_prevContentSize = self->_scrollView.contentSize;
+    self->_prevContentOffset = self->_scrollView.contentOffset;
+    self->_prevFrame = self->_scrollView.frame;
+
     for (NSUInteger ii = minIdx; ii < self->_contentView.subviews.count; ++ii) {
       // Find the first entirely visible view. This must be done after we update the content offset
       // or it will tend to grab rows that were made visible by the shift in position
@@ -1074,6 +1095,75 @@ RCT_SCROLL_EVENT_HANDLER(scrollViewDidScrollToTop, onScrollToTop)
         self->_firstVisibleView = subview;
         break;
       }
+    }
+  }];
+  [manager addUIBlock:^(__unused RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, UIView *> *viewRegistry) {
+    if (!self->_chatBehavior) {
+      return; // The prop might have changed in the previous UIBlocks, so need to abort here.
+    }
+
+    if (self->_scrollView.isDragging/* || self->_scrollView.isTracking*/) {
+      return;
+    }
+
+    CGRect prevFirst = self->_prevFirstVisibleFrame;
+    CGRect newFirst = self->_firstVisibleView.frame;
+    CGSize prevContentSize = self->_prevContentSize;
+    CGSize newContentSize = self->_scrollView.contentSize;
+    CGPoint prevContentOffset = self->_prevContentOffset;
+    CGPoint newContentOffset = self->_scrollView.contentOffset;
+    CGRect prevFrame = self->_prevFrame;
+    CGRect newFrame = self->_scrollView.frame;
+
+    // never do anything if the layout height is larger than the content height
+    if (newContentSize.height <= newFrame.size.height) {
+      return;
+    }
+
+    BOOL wasBottomInBounds = prevContentOffset.y + prevFrame.size.height <= prevContentSize.height;
+    BOOL isDecelerating = self->_scrollView.isDecelerating;
+
+    // if we're momentum scrolling and the bottom was in bounds, we don't want to adjust the content offset
+    if (isDecelerating && wasBottomInBounds) {
+      return;
+    }
+
+    CGFloat deltaY = newFrame.origin.y - prevFrame.origin.y;
+
+    RCTLogTrace(@"chatBehavior block called, topDeltaY: %f, oldFrame: %@, newFrame: %@, oldContentSize: %@, newContentSize: %@, oldContentOffset: %@, newContentOffset: %@, oldFirst: %@, newFirst: %@",
+           deltaY,
+           NSStringFromCGRect(prevFrame),
+           NSStringFromCGRect(newFrame),
+           NSStringFromCGSize(prevContentSize),
+           NSStringFromCGSize(newContentSize),
+           NSStringFromCGPoint(prevContentOffset),
+           NSStringFromCGPoint(newContentOffset),
+           NSStringFromCGRect(prevFirst),
+           NSStringFromCGRect(newFirst)
+           );
+
+    BOOL shouldBottomStick = YES;
+
+    // detect a bottom-overscroll, and let the normal rules play out for it
+    // (basically, we want a keyboard tap to keep us stuck to the bottom in this case)
+    if (isDecelerating && !wasBottomInBounds) {
+      shouldBottomStick = prevFrame.size.height != newFrame.size.height;
+    }
+
+    // if we were within the bottom 16 pts previously, stick to the end
+    if ((prevContentOffset.y > 0 && prevContentOffset.y + prevFrame.size.height > prevContentSize.height - 16 && shouldBottomStick)
+    // or if the frame size reduced while the content size stayed the same, and the frame reduction caused the content to be taller than the frame
+       || (newFrame.size.height < prevFrame.size.height && prevContentSize.height == newContentSize.height && prevFrame.size.height > prevContentSize.height && newFrame.size.height < newContentSize.height)) {
+      CGFloat newY = newContentSize.height - newFrame.size.height;
+      RCTLogTrace(@"[BottomStick] to newY: %f", newY);
+      CGPoint scrollTo = CGPointMake(newContentOffset.x, newY);
+      self->_scrollView.contentOffset = scrollTo;
+    }
+    else if (ABS(deltaY) > 0.1) {
+      // execute the normal maintainVisibleContentPosition logic here
+      CGFloat newY = newContentOffset.y + deltaY;
+      RCTLogTrace(@"[ContentStick] to newY: %f", newY);
+      self->_scrollView.contentOffset = CGPointMake(newContentOffset.x, newY);
     }
   }];
   [manager addUIBlock:^(__unused RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, UIView *> *viewRegistry) {

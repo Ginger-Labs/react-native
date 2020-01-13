@@ -463,6 +463,17 @@ const ScrollResponderMixin = {
     );
   },
 
+  scrollResponderScrollToIndex: function(
+    index: number,
+    animated?: boolean,
+  ) {
+    UIManager.dispatchViewManagerCommand(
+      nullthrows(this.scrollResponderGetScrollableNode()),
+      UIManager.getViewManagerConfig('RCTScrollView').Commands.scrollToIndex,
+      [index, animated !== false],
+    );
+  },
+
   /**
    * Scrolls to the end of the ScrollView, either immediately or with a smooth
    * animation.
