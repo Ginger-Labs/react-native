@@ -89,7 +89,7 @@ public class ReactEditText extends EditText {
   public ReactEditText(Context context) {
     super(context);
     setFocusableInTouchMode(false);
-
+    Log.e(this.getClass().getSimpleName(), "ReactEditText: Testing no docker.");
     mReactBackgroundManager = new ReactViewBackgroundManager(this);
     mInputMethodManager = (InputMethodManager)
         Assertions.assertNotNull(getContext().getSystemService(Context.INPUT_METHOD_SERVICE));
