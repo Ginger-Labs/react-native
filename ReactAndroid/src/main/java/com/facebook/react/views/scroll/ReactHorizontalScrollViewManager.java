@@ -7,6 +7,7 @@
 package com.facebook.react.views.scroll;
 
 import android.graphics.Color;
+import androidx.core.view.ViewCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -24,6 +25,7 @@ import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.yoga.YogaConstants;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 
 /**
  * View manager for {@link ReactHorizontalScrollView} components.
