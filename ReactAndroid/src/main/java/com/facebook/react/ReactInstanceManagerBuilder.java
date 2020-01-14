@@ -10,7 +10,6 @@ import static com.facebook.react.modules.systeminfo.AndroidInfoHelpers.getFriend
 import android.app.Activity;
 import android.app.Application;
 import androidx.annotation.Nullable;
-import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.bridge.JSBundleLoader;
@@ -239,12 +238,6 @@ public class ReactInstanceManagerBuilder {
     if (mInitialLifecycleState == LifecycleState.RESUMED) {
       Assertions.assertNotNull(
           mCurrentActivity, "Activity needs to be set if initial lifecycle state is resumed");
-    }
-
-    if (mInitialLifecycleState == LifecycleState.RESUMED) {
-      Assertions.assertNotNull(
-        mCurrentActivity,
-        "Activity needs to be set if initial lifecycle state is resumed");
     }
 
     Assertions.assertCondition(

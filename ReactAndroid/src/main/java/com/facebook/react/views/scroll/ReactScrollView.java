@@ -12,8 +12,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
-import androidx.core.view.ViewCompat;
-
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;

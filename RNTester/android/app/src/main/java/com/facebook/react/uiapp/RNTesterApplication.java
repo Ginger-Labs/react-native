@@ -11,8 +11,6 @@ import com.facebook.react.BuildConfig;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
-import com.facebook.react.bridge.JavaScriptExecutorFactory;
-import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.react.views.text.ReactFontManager;
 import com.facebook.soloader.SoLoader;
