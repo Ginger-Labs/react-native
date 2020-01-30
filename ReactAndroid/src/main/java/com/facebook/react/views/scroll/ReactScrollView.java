@@ -209,7 +209,7 @@ public class ReactScrollView extends ScrollView
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     if (oldh != 0) {
       if (mChatBehavior && h < oldh) {
-        Log.d(this.getClass().getSimpleName(), "h < old");
+        Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
         scrollTo(getScrollX(), getMaxScrollY());
       } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
         int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
@@ -280,6 +280,7 @@ public class ReactScrollView extends ScrollView
     int scrollDelta = computeScrollDeltaToGetChildRectOnScreen(tempRect);
 
     if (scrollDelta != 0) {
+      Log.e(this.getClass().getSimpleName(), "scrollToChild: scrollDelta: " + scrollDelta);
       scrollBy(0, scrollDelta);
     }
   }
@@ -829,14 +830,16 @@ public class ReactScrollView extends ScrollView
     }
 
 //    Uncomment to separate the vies by color.
-
-//    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
-//
-//    for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
-//      View child = contentViewGroup.getChildAt(i);
-//      int color = i % 2 == 0 ? Color.RED : Color.GREEN;
-//      child.setBackgroundColor(color);
-//    }
+    double rand = 100 * Math.random();
+    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
+    Log.e(this.getClass().getSimpleName(), "onLayoutChange: START CHILD INFO " + rand);
+    for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
+      View child = contentViewGroup.getChildAt(i);
+      int color = i % 2 == 0 ? Color.RED : Color.GREEN;
+      child.setBackgroundColor(color);
+      Log.e(this.getClass().getSimpleName(), "onLayoutChange: " + i + ": " + child.getScrollY());
+    }
+    Log.e(this.getClass().getSimpleName(), "onLayoutChange: END CHILD INFO " + rand);
 
     int maxScrollY = getMaxScrollY();
 
