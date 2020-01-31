@@ -107,7 +107,7 @@ public class ReactScrollView extends ScrollView
       if (activity != null) {
         activity .getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         Log.d(this.getClass().getSimpleName(), "ReactScrollView: display height: " + displayMetrics.heightPixels);
-        Log.d(this.getClass().getSimpleName(), "ReactScrollView: total view height: " + mContentView.getHeight());
+        Log.d(this.getClass().getSimpleName(), "ReactScrollView: total view height: " + (mContentView == null ? " null" : mContentView.getHeight()));
       } else {
           Log.e(this.getClass().getSimpleName(), "ReactScrollView: activity is null.");
       }
