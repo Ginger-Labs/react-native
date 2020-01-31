@@ -874,7 +874,7 @@ public class ReactScrollView extends ScrollView
       Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
       int mode = getOverScrollMode();
       setOverScrollMode(OVER_SCROLL_NEVER);
-      smoothScrollTo(getScrollX(), 100000);
+      scrollTo(getScrollX(), maxScrollY);
       setOverScrollMode(mode);
     }
   }
