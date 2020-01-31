@@ -89,6 +89,8 @@ public class ReactScrollView extends ScrollView
   private boolean mChatBehavior = false;
   private ReadableMap mMaintainVisibleContentPosition;
 
+  private static final boolean DEBUG = true;
+
   public ReactScrollView(ReactContext context) {
     this(context, null);
   }
@@ -101,8 +103,10 @@ public class ReactScrollView extends ScrollView
     DisplayMetrics displayMetrics = new DisplayMetrics();
     context.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-    int height = displayMetrics.heightPixels;
-    Log.e(this.getClass().getSimpleName(), "ReactScrollView: height: " + height);
+    if (DEBUG) {
+      Log.d(this.getClass().getSimpleName(), "ReactScrollView: display height: " + displayMetrics.heightPixels);
+      Log.d(this.getClass().getSimpleName(), "ReactScrollView: total view height: " + getChildAt(0).getHeight());
+    }
 
     mScroller = getOverScrollerFromParent();
     setOnHierarchyChangeListener(this);
@@ -784,7 +788,6 @@ public class ReactScrollView extends ScrollView
   }
 
   public void scrollToIndex(int index, boolean animated) {
-    Log.e(this.getClass().getSimpleName(), "scrollToIndex: START");
     Log.d(getClass().getSimpleName(), "scrollToIndex: " + index + ", anim: " + animated);
     // This is to make sure we include the header too.
     View child = getChildAtIndex(index);
@@ -792,17 +795,20 @@ public class ReactScrollView extends ScrollView
       Log.e(getClass().getSimpleName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
       return;
     }
-    child.setBackgroundColor(Color.BLUE);
     int scrollTo = child.getTop();
-    Log.e(this.getClass().getSimpleName(), "scrollToIndex: scrollTo: " + scrollTo);
-    Log.e(this.getClass().getSimpleName(), "scrollToIndex:  getHeight(): " +  getHeight());
-    Log.e(this.getClass().getSimpleName(), "scrollToIndex:  getScrollY(): " +  getScrollY());
+
+    if (DEBUG) {
+      child.setBackgroundColor(Color.BLUE);
+      Log.d(this.getClass().getSimpleName(), "scrollToIndex: scrollTo: " + scrollTo);
+      Log.d(this.getClass().getSimpleName(), "scrollToIndex:  getHeight(): " +  getHeight());
+      Log.d(this.getClass().getSimpleName(), "scrollToIndex:  getScrollY(): " +  getScrollY());
+    }
+
     if (animated) {
       smoothScrollTo(0, scrollTo);
     } else {
       scrollTo(0, scrollTo);
     }
-    Log.e(this.getClass().getSimpleName(), "scrollToIndex: END");
   }
 
   private View getChildAtIndex(int index) {
