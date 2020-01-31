@@ -830,16 +830,12 @@ public class ReactScrollView extends ScrollView
     }
 
 //    Uncomment to separate the vies by color.
-    double rand = 100 * Math.random();
     ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
-    Log.e(this.getClass().getSimpleName(), "onLayoutChange: START CHILD INFO " + rand);
     for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
       View child = contentViewGroup.getChildAt(i);
       int color = i % 2 == 0 ? Color.RED : Color.GREEN;
       child.setBackgroundColor(color);
-      Log.e(this.getClass().getSimpleName(), "onLayoutChange: " + i + ": " + child.getScrollY());
     }
-    Log.e(this.getClass().getSimpleName(), "onLayoutChange: END CHILD INFO " + rand);
 
     int maxScrollY = getMaxScrollY();
 
