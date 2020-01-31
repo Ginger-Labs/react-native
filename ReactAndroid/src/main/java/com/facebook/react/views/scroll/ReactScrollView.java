@@ -107,7 +107,7 @@ public class ReactScrollView extends ScrollView
       if (activity != null) {
         activity .getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         Log.d(this.getClass().getSimpleName(), "ReactScrollView: display height: " + displayMetrics.heightPixels);
-        Log.d(this.getClass().getSimpleName(), "ReactScrollView: total view height: " + getHeight());
+        Log.d(this.getClass().getSimpleName(), "ReactScrollView: total view height: " + mContentView.getHeight());
       } else {
           Log.e(this.getClass().getSimpleName(), "ReactScrollView: activity is null.");
       }
@@ -866,7 +866,7 @@ public class ReactScrollView extends ScrollView
     int maxScrollY = getMaxScrollY();
 
     if (getScrollY() > maxScrollY) {
-      Log.d(getClass().getSimpleName(), "getScrollY() > maxScrollY");
+      Log.d(getClass().getSimpleName(), "(getScrollY() > maxScrollY) maxScrollY: " + maxScrollY);
       scrollTo(getScrollX(), maxScrollY);
     }
 
