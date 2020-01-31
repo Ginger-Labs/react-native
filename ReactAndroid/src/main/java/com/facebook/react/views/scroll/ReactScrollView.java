@@ -6,6 +6,7 @@
  */
 package com.facebook.react.views.scroll;
 
+import android.app.Activity;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -100,12 +101,17 @@ public class ReactScrollView extends ScrollView
     mFpsListener = fpsListener;
     mReactBackgroundManager = new ReactViewBackgroundManager(this);
 
-    DisplayMetrics displayMetrics = new DisplayMetrics();
-    context.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
     if (DEBUG) {
-      Log.d(this.getClass().getSimpleName(), "ReactScrollView: display height: " + displayMetrics.heightPixels);
-      Log.d(this.getClass().getSimpleName(), "ReactScrollView: total view height: " + getChildAt(0).getHeight());
+      DisplayMetrics displayMetrics = new DisplayMetrics();
+      Activity activity = context.getCurrentActivity();
+      if (activity != null) {
+        activity .getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Log.d(this.getClass().getSimpleName(), "ReactScrollView: display height: " + displayMetrics.heightPixels);
+        Log.d(this.getClass().getSimpleName(), "ReactScrollView: total view height: " + getChildAt(0).getHeight());
+      } else {
+          Log.e(this.getClass().getSimpleName(), "ReactScrollView: activity is null.");
+      }
+
     }
 
     mScroller = getOverScrollerFromParent();
@@ -848,12 +854,13 @@ public class ReactScrollView extends ScrollView
       return;
     }
 
-//  Uncomment to separate the vies by color.
-    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
-    for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
-      View child = contentViewGroup.getChildAt(i);
-      int color = i % 2 == 0 ? Color.RED : Color.GREEN;
-      child.setBackgroundColor(color);
+    if (DEBUG) {
+        ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
+        for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
+            View child = contentViewGroup.getChildAt(i);
+            int color = i % 2 == 0 ? Color.RED : Color.GREEN;
+            child.setBackgroundColor(color);
+        }
     }
 
     int maxScrollY = getMaxScrollY();
