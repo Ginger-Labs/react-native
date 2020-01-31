@@ -12,6 +12,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -96,6 +97,12 @@ public class ReactScrollView extends ScrollView
     super(context);
     mFpsListener = fpsListener;
     mReactBackgroundManager = new ReactViewBackgroundManager(this);
+
+    DisplayMetrics displayMetrics = new DisplayMetrics();
+    context.getCurrentActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+    int height = displayMetrics.heightPixels;
+    Log.e(this.getClass().getSimpleName(), "ReactScrollView: height: " + height);
 
     mScroller = getOverScrollerFromParent();
     setOnHierarchyChangeListener(this);
@@ -777,6 +784,7 @@ public class ReactScrollView extends ScrollView
   }
 
   public void scrollToIndex(int index, boolean animated) {
+    Log.e(this.getClass().getSimpleName(), "scrollToIndex: START");
     Log.d(getClass().getSimpleName(), "scrollToIndex: " + index + ", anim: " + animated);
     // This is to make sure we include the header too.
     View child = getChildAtIndex(index);
@@ -784,12 +792,17 @@ public class ReactScrollView extends ScrollView
       Log.e(getClass().getSimpleName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
       return;
     }
+    child.setBackgroundColor(Color.BLUE);
     int scrollTo = child.getTop();
+    Log.e(this.getClass().getSimpleName(), "scrollToIndex: scrollTo: " + scrollTo);
+    Log.e(this.getClass().getSimpleName(), "scrollToIndex:  getHeight(): " +  getHeight());
+    Log.e(this.getClass().getSimpleName(), "scrollToIndex:  getScrollY(): " +  getScrollY());
     if (animated) {
       smoothScrollTo(0, scrollTo);
     } else {
       scrollTo(0, scrollTo);
     }
+    Log.e(this.getClass().getSimpleName(), "scrollToIndex: END");
   }
 
   private View getChildAtIndex(int index) {
@@ -829,7 +842,7 @@ public class ReactScrollView extends ScrollView
       return;
     }
 
-//    Uncomment to separate the vies by color.
+//  Uncomment to separate the vies by color.
     ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
     for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
       View child = contentViewGroup.getChildAt(i);
