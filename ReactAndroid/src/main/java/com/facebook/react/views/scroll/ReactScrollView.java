@@ -107,8 +107,6 @@ public class ReactScrollView extends ScrollView
       if (activity != null) {
         activity .getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         Log.d(this.getClass().getSimpleName(), "ReactScrollView: display height: " + displayMetrics.heightPixels);
-        Log.d(this.getClass().getSimpleName(), "ReactScrollView: mContentView height: "
-                + (mContentView == null ? " null" : mContentView.getHeight()));
       } else {
           Log.e(this.getClass().getSimpleName(), "ReactScrollView: activity is null.");
       }
@@ -826,6 +824,7 @@ public class ReactScrollView extends ScrollView
   @Override
   public void onChildViewAdded(View parent, View child) {
     mContentView = child;
+    Log.d(this.getClass().getSimpleName(), "ReactScrollView: mContentView height: " + child.getHeight());
     mContentView.addOnLayoutChangeListener(this);
   }
 
@@ -873,10 +872,10 @@ public class ReactScrollView extends ScrollView
 
     if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
       Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
-//      int mode = getOverScrollMode();
-//      setOverScrollMode(OVER_SCROLL_NEVER);
-//      scrollTo(getScrollX(), maxScrollY);
-//      setOverScrollMode(mode);
+      int mode = getOverScrollMode();
+      setOverScrollMode(OVER_SCROLL_NEVER);
+      scrollTo(getScrollX(), maxScrollY);
+      setOverScrollMode(mode);
     }
   }
 
