@@ -873,10 +873,10 @@ public class ReactScrollView extends ScrollView
 
     if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
       Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
-      int mode = getOverScrollMode();
-      setOverScrollMode(OVER_SCROLL_NEVER);
-      scrollTo(getScrollX(), maxScrollY);
-      setOverScrollMode(mode);
+//      int mode = getOverScrollMode();
+//      setOverScrollMode(OVER_SCROLL_NEVER);
+//      scrollTo(getScrollX(), maxScrollY);
+//      setOverScrollMode(mode);
     }
   }
 
