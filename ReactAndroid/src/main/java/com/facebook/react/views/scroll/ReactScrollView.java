@@ -90,7 +90,7 @@ public class ReactScrollView extends ScrollView
   private boolean mChatBehavior = false;
   private ReadableMap mMaintainVisibleContentPosition;
 
-  private static final boolean DEBUG = true;
+  private static final boolean DEBUG = false;
 
   public ReactScrollView(ReactContext context) {
     this(context, null);
@@ -809,7 +809,7 @@ public class ReactScrollView extends ScrollView
       Log.d(this.getClass().getSimpleName(), "scrollToIndex:  getScrollY(): " +  getScrollY());
     }
 
-    if (true) { //todo use animated!
+    if (animated) { //todo use animated!
       smoothScrollTo(0, scrollTo);
     } else {
       scrollTo(0, scrollTo);
@@ -824,7 +824,6 @@ public class ReactScrollView extends ScrollView
   @Override
   public void onChildViewAdded(View parent, View child) {
     mContentView = child;
-    Log.d(this.getClass().getSimpleName(), "ReactScrollView: mContentView height: " + child.getHeight());
     mContentView.addOnLayoutChangeListener(this);
   }
 
