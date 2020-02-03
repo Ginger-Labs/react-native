@@ -296,7 +296,6 @@ public class ReactScrollView extends ScrollView
     int scrollDelta = computeScrollDeltaToGetChildRectOnScreen(tempRect);
 
     if (scrollDelta != 0) {
-      Log.e(this.getClass().getSimpleName(), "scrollToChild: scrollDelta: " + scrollDelta);
       scrollBy(0, scrollDelta);
     }
   }
@@ -809,7 +808,7 @@ public class ReactScrollView extends ScrollView
       Log.d(this.getClass().getSimpleName(), "scrollToIndex:  getScrollY(): " +  getScrollY());
     }
 
-    if (animated) { //todo use animated!
+    if (animated) {
       smoothScrollTo(0, scrollTo);
     } else {
       scrollTo(0, scrollTo);
