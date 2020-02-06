@@ -253,6 +253,7 @@ public class ReactScrollView extends ScrollView
       // Iterate the inner groups.
       if (heightCount > scrollY) {
         Log.d(this.getClass().getSimpleName(), "getIndexOfFirstVisibleView: indexCount: " + indexCount + ", minIndexForVisible: " + minIndexForVisible);
+        
         return indexCount < minIndexForVisible ? minIndexForVisible : indexCount;
       } else {
         heightCount += child.getHeight();
