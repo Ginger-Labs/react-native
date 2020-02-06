@@ -231,7 +231,7 @@ public class ReactScrollView extends ScrollView
         int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
         int index = getIndexOfFirstVisibleView(minIndexForVisible);
         Log.d(getClass().getSimpleName(), "onSizeChanged: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
-        scrollToIndex(index, false);
+        if (index != -1) scrollToIndex(index, false);
       }
     }
     super.onSizeChanged(w, h, oldw, oldh);
@@ -260,7 +260,7 @@ public class ReactScrollView extends ScrollView
     }
     Log.e(getClass().getSimpleName(), "getIndexOfFirstVisibleView: Did not find the visible view, returning last index.");
     // Return last one as default, scroll to bottom.
-    return indexCount;
+    return -1;
   }
 
   @Override
