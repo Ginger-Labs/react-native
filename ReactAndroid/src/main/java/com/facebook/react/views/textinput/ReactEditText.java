@@ -314,7 +314,12 @@ public class ReactEditText extends EditText {
     if (focused) {
       View parent = this;
       do {
-        parent = parent instanceof View ? (View) parent.getParent() : null;
+        try {
+          parent = (View) parent.getParent();
+        } catch (ClassCastException ignored) {
+          parent = null;
+        }
+
         if (parent instanceof Collection) {
           Log.e(this.getClass().getSimpleName(), "onFocusChanged: FOCUSED Setting SOFT_INPUT_ADJUST_PAN, found collection parent: " + parent.getClass().getName());
           ((ReactContext) getContext()).getCurrentActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
