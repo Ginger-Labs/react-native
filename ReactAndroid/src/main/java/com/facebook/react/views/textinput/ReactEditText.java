@@ -34,6 +34,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ScrollView;
 
 import androidx.annotation.Nullable;
 import androidx.core.view.AccessibilityDelegateCompat;
@@ -320,7 +321,7 @@ public class ReactEditText extends EditText {
           parent = null;
         }
 
-        if (parent instanceof Collection) {
+        if (parent instanceof ScrollView) {
           Log.e(this.getClass().getSimpleName(), "onFocusChanged: FOCUSED Setting SOFT_INPUT_ADJUST_PAN, found collection parent: " + parent.getClass().getName());
           ((ReactContext) getContext()).getCurrentActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         }
