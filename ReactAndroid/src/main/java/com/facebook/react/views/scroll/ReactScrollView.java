@@ -228,10 +228,11 @@ public class ReactScrollView extends ScrollView
         Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
         scrollTo(getScrollX(), getMaxScrollY());
       } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
-        int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
-        int index = getIndexOfFirstVisibleView(minIndexForVisible);
-        Log.d(getClass().getSimpleName(), "onSizeChanged: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
-        if (index != -1) scrollToIndex(index, false);
+        // No Need for this apparently.
+//        int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
+//        int index = getIndexOfFirstVisibleView(minIndexForVisible);
+//        Log.d(getClass().getSimpleName(), "onSizeChanged: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
+//        if (index != -1) scrollToIndex(index, false);
       }
     }
     super.onSizeChanged(w, h, oldw, oldh);
@@ -253,14 +254,13 @@ public class ReactScrollView extends ScrollView
       // Iterate the inner groups.
       if (heightCount > scrollY) {
         Log.d(this.getClass().getSimpleName(), "getIndexOfFirstVisibleView: indexCount: " + indexCount + ", minIndexForVisible: " + minIndexForVisible);
-        
         return indexCount < minIndexForVisible ? minIndexForVisible : indexCount;
       } else {
         heightCount += child.getHeight();
         indexCount++;
       }
     }
-    Log.e(getClass().getSimpleName(), "getIndexOfFirstVisibleView: Did not find the visible view, returning last index.");
+    Log.e(getClass().getSimpleName(), "getIndexOfFirstVisibleView: Did not find the visible view, returning -1.");
     // Return last one as default, scroll to bottom.
     return -1;
   }
