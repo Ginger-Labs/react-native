@@ -330,7 +330,6 @@ public class ReactEditText extends EditText {
       } while (parent != null);
     } else {
       Log.i(this.getClass().getSimpleName(), "onFocusChanged: DEFOCUSED Setting SOFT_INPUT_ADJUST_RESIZE");
-      ((ReactContext) getContext()).getCurrentActivity().getWindow().setSoftInputMode();
       setSoftInput(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
