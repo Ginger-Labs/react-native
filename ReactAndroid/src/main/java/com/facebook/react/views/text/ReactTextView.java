@@ -407,14 +407,14 @@ public class ReactTextView extends AppCompatTextView implements ReactCompoundVie
   @Override
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
-//
-//    try {
-//      Log.d("onAttachedToWindow", "Re-enabling..");
-//      super.setEnabled(false);
-//      super.setEnabled(true);
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
+
+    try {
+      Log.d("onAttachedToWindow", "Re-enabling..");
+      super.setEnabled(false);
+      super.setEnabled(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     if (mContainsImages && getText() instanceof Spanned) {
       Spanned text = (Spanned) getText();
