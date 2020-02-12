@@ -226,7 +226,7 @@ public class ReactScrollView extends ScrollView
     if (oldh != 0) {
       if (mChatBehavior && h < oldh) {
         Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
-        scrollTo(getScrollX(), getMaxScrollY());
+//        scrollTo(getScrollX(), getMaxScrollY());
       } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
         // No Need for this apparently.
 //        int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
