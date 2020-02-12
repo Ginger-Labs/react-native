@@ -221,20 +221,22 @@ public class ReactScrollView extends ScrollView
     scrollTo(getScrollX(), getScrollY());
   }
 
+
+  /** Comment for now and remove later if proven working.*/
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    if (oldh != 0) {
-      if (mChatBehavior && h < oldh) {
-        Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
+//    if (oldh != 0) {
+//      if (mChatBehavior && h < oldh) {
+//        Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
 //        scrollTo(getScrollX(), getMaxScrollY());
-      } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
+//      } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
         // No Need for this apparently.
 //        int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
 //        int index = getIndexOfFirstVisibleView(minIndexForVisible);
 //        Log.d(getClass().getSimpleName(), "onSizeChanged: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
 //        if (index != -1) scrollToIndex(index, false);
-      }
-    }
+//      }
+//    }
     super.onSizeChanged(w, h, oldw, oldh);
     if (mRemoveClippedSubviews) {
       updateClippingRect();
@@ -242,28 +244,28 @@ public class ReactScrollView extends ScrollView
   }
 
   // Do not use minIndexForVisible for now, it's 0 anyways.
-  private int getIndexOfFirstVisibleView(int minIndexForVisible) {
-    int scrollY = getScrollY();
-    int heightCount = 0;
-    int indexCount = 0;
-
-    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
-
-    for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
-      View child = contentViewGroup.getChildAt(i);
-      // Iterate the inner groups.
-      if (heightCount > scrollY) {
-        Log.d(this.getClass().getSimpleName(), "getIndexOfFirstVisibleView: indexCount: " + indexCount + ", minIndexForVisible: " + minIndexForVisible);
-        return indexCount < minIndexForVisible ? minIndexForVisible : indexCount;
-      } else {
-        heightCount += child.getHeight();
-        indexCount++;
-      }
-    }
-    Log.e(getClass().getSimpleName(), "getIndexOfFirstVisibleView: Did not find the visible view, returning -1.");
-    // Return last one as default, scroll to bottom.
-    return -1;
-  }
+//  private int getIndexOfFirstVisibleView(int minIndexForVisible) {
+//    int scrollY = getScrollY();
+//    int heightCount = 0;
+//    int indexCount = 0;
+//
+//    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
+//
+//    for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
+//      View child = contentViewGroup.getChildAt(i);
+//      // Iterate the inner groups.
+//      if (heightCount > scrollY) {
+//        Log.d(this.getClass().getSimpleName(), "getIndexOfFirstVisibleView: indexCount: " + indexCount + ", minIndexForVisible: " + minIndexForVisible);
+//        return indexCount < minIndexForVisible ? minIndexForVisible : indexCount;
+//      } else {
+//        heightCount += child.getHeight();
+//        indexCount++;
+//      }
+//    }
+//    Log.e(getClass().getSimpleName(), "getIndexOfFirstVisibleView: Did not find the visible view, returning -1.");
+//    // Return last one as default, scroll to bottom.
+//    return -1;
+//  }
 
   @Override
   protected void onAttachedToWindow() {
