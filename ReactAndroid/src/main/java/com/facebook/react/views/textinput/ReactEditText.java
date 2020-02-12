@@ -313,25 +313,25 @@ public class ReactEditText extends EditText {
 
   @Override
   protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
-    if (focused) {
-      View parent = this;
-      // Loop to see if you're in a scrollview and change the soft input.
-
-      do {
-        try {
-          parent = (View) parent.getParent();
-        } catch (ClassCastException ignored) {
-          parent = null;
-        }
-        if (parent instanceof ScrollView) {
-          Log.i(this.getClass().getSimpleName(), "onFocusChanged: FOCUSED Setting SOFT_INPUT_ADJUST_PAN, found collection parent: " + parent.getClass().getName());
-          setSoftInput(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        }
-      } while (parent != null);
-    } else {
-      Log.i(this.getClass().getSimpleName(), "onFocusChanged: DEFOCUSED Setting SOFT_INPUT_ADJUST_RESIZE");
-      setSoftInput(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-    }
+//    if (focused) {
+//      View parent = this;
+//      // Loop to see if you're in a scrollview and change the soft input.
+//
+//      do {
+//        try {
+//          parent = (View) parent.getParent();
+//        } catch (ClassCastException ignored) {
+//          parent = null;
+//        }
+//        if (parent instanceof ScrollView) {
+//          Log.i(this.getClass().getSimpleName(), "onFocusChanged: FOCUSED Setting SOFT_INPUT_ADJUST_PAN, found collection parent: " + parent.getClass().getName());
+//          setSoftInput(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        }
+//      } while (parent != null);
+//    } else {
+//      Log.i(this.getClass().getSimpleName(), "onFocusChanged: DEFOCUSED Setting SOFT_INPUT_ADJUST_RESIZE");
+//      setSoftInput(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//    }
 
     super.onFocusChanged(focused, direction, previouslyFocusedRect);
     if (focused && mSelectionWatcher != null) {
@@ -339,24 +339,24 @@ public class ReactEditText extends EditText {
     }
   }
 
-  private void setSoftInput(int inputType) {
-    ReactContext reactContext = (ReactContext) getContext();
-    if (reactContext != null) {
-      Activity activity = reactContext.getCurrentActivity();
-      if (activity != null) {
-        Window window = activity.getWindow();
-        if (window != null) {
-          window.setSoftInputMode(inputType);
-        } else {
-          Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, window is null");
-        }
-      } else {
-        Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, activity is null");
-      }
-    } else {
-      Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, reactContext is null");
-    }
-  }
+//  private void setSoftInput(int inputType) {
+//    ReactContext reactContext = (ReactContext) getContext();
+//    if (reactContext != null) {
+//      Activity activity = reactContext.getCurrentActivity();
+//      if (activity != null) {
+//        Window window = activity.getWindow();
+//        if (window != null) {
+//          window.setSoftInputMode(inputType);
+//        } else {
+//          Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, window is null");
+//        }
+//      } else {
+//        Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, activity is null");
+//      }
+//    } else {
+//      Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, reactContext is null");
+//    }
+//  }
 
   public void setSelectionWatcher(SelectionWatcher selectionWatcher) {
     mSelectionWatcher = selectionWatcher;
