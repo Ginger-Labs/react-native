@@ -690,13 +690,13 @@ public class ReactEditText extends EditText {
   @Override
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
-    try {
-      Log.d("onAttachedToWindow", "Re-enabling..");
-      super.setEnabled(false);
-      super.setEnabled(true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+//    try {
+//      Log.d("onAttachedToWindow", "Re-enabling..");
+//      super.setEnabled(false);
+//      super.setEnabled(true);
+//    } catch (Exception e) {
+//      e.printStackTrace();
+//    }
     if (mContainsImages) {
       Spanned text = getText();
       TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
