@@ -64,6 +64,7 @@ RCT_EXPORT_VIEW_PROPERTY(bouncesZoom, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(canCancelContentTouches, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(centerContent, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(maintainVisibleContentPosition, NSDictionary)
+RCT_EXPORT_VIEW_PROPERTY(chatBehavior, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(automaticallyAdjustContentInsets, BOOL)
 RCT_EXPORT_VIEW_PROPERTY(decelerationRate, CGFloat)
 RCT_EXPORT_VIEW_PROPERTY(directionalLockEnabled, BOOL)
@@ -166,6 +167,23 @@ RCT_EXPORT_METHOD(scrollTo:(nonnull NSNumber *)reactTag
                   "with tag #%@", view, reactTag);
     }
   }];
+}
+
+RCT_EXPORT_METHOD(scrollToIndex:(nonnull NSNumber *)reactTag
+                  index:(nonnull NSNumber*)index
+                  animated:(BOOL)animated)
+{
+  [self.bridge.uiManager addUIBlock:
+   ^(__unused RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry){
+     UIView *view = viewRegistry[reactTag];
+     if ([view isKindOfClass:[RCTScrollView class]]) {
+       RCTScrollView *scrollView = (id)view;
+       [scrollView scrollToIndex:[index integerValue] animated:animated];
+     } else {
+       RCTLogError(@"tried to scrollTo: on non-RCTScrollableProtocol view %@ "
+                   "with tag #%@", view, reactTag);
+     }
+   }];
 }
 
 RCT_EXPORT_METHOD(scrollToEnd:(nonnull NSNumber *)reactTag

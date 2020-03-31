@@ -9,9 +9,11 @@ package com.facebook.react.views.scroll;
 
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.DisplayMetricsHolder;
@@ -168,6 +170,16 @@ public class ReactScrollViewManager extends ViewGroupManager<ReactScrollView>
     ViewCompat.setNestedScrollingEnabled(view, value);
   }
 
+  @ReactProp(name = "chatBehavior")
+  public void setChatBehavior(ReactScrollView view, boolean value) {
+    view.setChatBehavior(value);
+  }
+
+  @ReactProp(name = "maintainVisibleContentPosition")
+  public void setMaintainVisibleContentPosition(ReactScrollView view, ReadableMap value) {
+    view.setMaintainVisibleContentPosition(value);
+  }
+
   @Override
   public @Nullable Map<String, Integer> getCommandsMap() {
     return ReactScrollViewCommandHelper.getCommandsMap();
@@ -188,6 +200,11 @@ public class ReactScrollViewManager extends ViewGroupManager<ReactScrollView>
   @Override
   public void flashScrollIndicators(ReactScrollView scrollView) {
     scrollView.flashScrollIndicators();
+  }
+
+  @Override
+  public void scrollToIndex(ReactScrollView scrollView, int index, boolean animated) {
+    scrollView.scrollToIndex(index, animated);
   }
 
   @Override

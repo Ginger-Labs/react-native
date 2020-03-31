@@ -23,8 +23,10 @@ public class ReactScrollViewCommandHelper {
   public static final int COMMAND_SCROLL_TO = 1;
   public static final int COMMAND_SCROLL_TO_END = 2;
   public static final int COMMAND_FLASH_SCROLL_INDICATORS = 3;
+  public static final int COMMAND_SCROLL_TO_INDEX = 4;
 
   public interface ScrollCommandHandler<T> {
+    void scrollToIndex(T scrollView, int index, boolean animated);
     void scrollTo(T scrollView, ScrollToCommandData data);
 
     void scrollToEnd(T scrollView, ScrollToEndCommandData data);
@@ -59,6 +61,8 @@ public class ReactScrollViewCommandHelper {
         COMMAND_SCROLL_TO,
         "scrollToEnd",
         COMMAND_SCROLL_TO_END,
+        "scrollToIndex",
+        COMMAND_SCROLL_TO_INDEX,
         "flashScrollIndicators",
         COMMAND_FLASH_SCROLL_INDICATORS);
   }
@@ -72,6 +76,10 @@ public class ReactScrollViewCommandHelper {
     Assertions.assertNotNull(scrollView);
     Assertions.assertNotNull(args);
     switch (commandType) {
+      case COMMAND_SCROLL_TO_INDEX: {
+        scrollToIndex(viewManager, scrollView, args);
+        return;
+      }
       case COMMAND_SCROLL_TO:
         {
           scrollTo(viewManager, scrollView, args);
@@ -137,5 +145,12 @@ public class ReactScrollViewCommandHelper {
       ScrollCommandHandler<T> viewManager, T scrollView, @Nullable ReadableArray args) {
     boolean animated = args.getBoolean(0);
     viewManager.scrollToEnd(scrollView, new ScrollToEndCommandData(animated));
+  }
+
+  private static <T> void scrollToIndex(
+      ScrollCommandHandler<T> viewManager, T scrollView, @Nullable ReadableArray args) {
+    int index = args.getInt(0);
+    boolean animated = args.getBoolean(1);
+    viewManager.scrollToIndex(scrollView, index, animated);
   }
 }

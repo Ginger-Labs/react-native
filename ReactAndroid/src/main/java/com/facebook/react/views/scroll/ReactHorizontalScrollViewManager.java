@@ -9,6 +9,8 @@ package com.facebook.react.views.scroll;
 
 import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import com.facebook.react.bridge.ReadableArray;
@@ -173,6 +175,11 @@ public class ReactHorizontalScrollViewManager extends ViewGroupManager<ReactHori
   @Override
   public void flashScrollIndicators(ReactHorizontalScrollView scrollView) {
     scrollView.flashScrollIndicators();
+  }
+
+  @Override
+  public void scrollToIndex(ReactHorizontalScrollView scrollView, int index, boolean animated) {
+    Log.e(this.getName(), "scrollToIndex: NOT IMPLEMENTED for Horizontal ScrollView");
   }
 
   @Override

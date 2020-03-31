@@ -825,6 +825,10 @@ class ScrollView extends React.Component<Props, State> {
     });
   }
 
+  scrollToIndex(options: {index: number, animated?: boolean}) {
+    this._scrollResponder.scrollResponderScrollToIndex(options.index, options.animated);
+  }
+
   /**
    * If this is a vertical ScrollView scrolls to the bottom.
    * If this is a horizontal ScrollView scrolls to the right.

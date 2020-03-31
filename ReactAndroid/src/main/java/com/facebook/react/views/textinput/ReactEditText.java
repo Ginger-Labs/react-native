@@ -7,6 +7,7 @@
 
 package com.facebook.react.views.textinput;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -21,19 +22,26 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.text.method.QwertyKeyListener;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewParent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ScrollView;
+
 import androidx.annotation.Nullable;
 import androidx.core.view.AccessibilityDelegateCompat;
 import androidx.core.view.ViewCompat;
+
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.JavaOnlyMap;
 import com.facebook.react.bridge.ReactContext;
@@ -45,7 +53,9 @@ import com.facebook.react.views.text.ReactTypefaceUtils;
 import com.facebook.react.views.text.TextAttributes;
 import com.facebook.react.views.text.TextInlineImageSpan;
 import com.facebook.react.views.view.ReactViewBackgroundManager;
+
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * A wrapper around the EditText that lets us better control what happens when an EditText gets
@@ -80,14 +90,20 @@ public class ReactEditText extends EditText {
 
   private @Nullable ArrayList<TextWatcher> mListeners;
   private @Nullable TextWatcherDelegator mTextWatcherDelegator;
+
   private int mStagedInputType;
   protected boolean mContainsImages;
-  private @Nullable Boolean mBlurOnSubmit;
+  private @Nullable
+  Boolean mBlurOnSubmit;
   private boolean mDisableFullscreen;
-  private @Nullable String mReturnKeyType;
-  private @Nullable SelectionWatcher mSelectionWatcher;
-  private @Nullable ContentSizeWatcher mContentSizeWatcher;
-  private @Nullable ScrollWatcher mScrollWatcher;
+  private @Nullable
+  String mReturnKeyType;
+  private @Nullable
+  SelectionWatcher mSelectionWatcher;
+  private @Nullable
+  ContentSizeWatcher mContentSizeWatcher;
+  private @Nullable
+  ScrollWatcher mScrollWatcher;
   private final InternalKeyListener mKeyListener;
   private boolean mDetectScrollMovement = false;
   private boolean mOnKeyPress = false;
@@ -113,10 +129,10 @@ public class ReactEditText extends EditText {
 
     mReactBackgroundManager = new ReactViewBackgroundManager(this);
     mInputMethodManager =
-        (InputMethodManager)
-            Assertions.assertNotNull(getContext().getSystemService(Context.INPUT_METHOD_SERVICE));
+      (InputMethodManager)
+        Assertions.assertNotNull(getContext().getSystemService(Context.INPUT_METHOD_SERVICE));
     mDefaultGravityHorizontal =
-        getGravity() & (Gravity.HORIZONTAL_GRAVITY_MASK | Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK);
+      getGravity() & (Gravity.HORIZONTAL_GRAVITY_MASK | Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK);
     mDefaultGravityVertical = getGravity() & Gravity.VERTICAL_GRAVITY_MASK;
     mNativeEventCount = 0;
     mMostRecentEventCount = 0;
@@ -136,24 +152,24 @@ public class ReactEditText extends EditText {
     // Turn off hardware acceleration for Oreo (T40484798)
     // see https://issuetracker.google.com/issues/67102093
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-        && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
+      && Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
       setLayerType(View.LAYER_TYPE_SOFTWARE, null);
     }
 
     ViewCompat.setAccessibilityDelegate(
-        this,
-        new AccessibilityDelegateCompat() {
-          @Override
-          public boolean performAccessibilityAction(View host, int action, Bundle args) {
-            if (action == AccessibilityNodeInfo.ACTION_CLICK) {
-              mShouldAllowFocus = true;
-              requestFocus();
-              mShouldAllowFocus = false;
-              return true;
-            }
-            return super.performAccessibilityAction(host, action, args);
+      this,
+      new AccessibilityDelegateCompat() {
+        @Override
+        public boolean performAccessibilityAction(View host, int action, Bundle args) {
+          if (action == AccessibilityNodeInfo.ACTION_CLICK) {
+            mShouldAllowFocus = true;
+            requestFocus();
+            mShouldAllowFocus = false;
+            return true;
           }
-        });
+          return super.performAccessibilityAction(host, action, args);
+        }
+      });
   }
 
   // After the text changes inside an EditText, TextView checks if a layout() has been requested.
@@ -184,9 +200,9 @@ public class ReactEditText extends EditText {
       case MotionEvent.ACTION_MOVE:
         if (mDetectScrollMovement) {
           if (!canScrollVertically(-1)
-              && !canScrollVertically(1)
-              && !canScrollHorizontally(-1)
-              && !canScrollHorizontally(1)) {
+            && !canScrollVertically(1)
+            && !canScrollHorizontally(-1)
+            && !canScrollHorizontally(1)) {
             // We cannot scroll, let parent views take care of these touches.
             this.getParent().requestDisallowInterceptTouchEvent(false);
           }
@@ -223,7 +239,7 @@ public class ReactEditText extends EditText {
     InputConnection inputConnection = super.onCreateInputConnection(outAttrs);
     if (inputConnection != null && mOnKeyPress) {
       inputConnection =
-          new ReactEditTextInputConnectionWrapper(inputConnection, reactContext, this);
+        new ReactEditTextInputConnectionWrapper(inputConnection, reactContext, this);
     }
 
     if (isMultiline() && getBlurOnSubmit()) {
@@ -314,11 +330,50 @@ public class ReactEditText extends EditText {
 
   @Override
   protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
+//    if (focused) {
+//      View parent = this;
+//      // Loop to see if you're in a scrollview and change the soft input.
+//
+//      do {
+//        try {
+//          parent = (View) parent.getParent();
+//        } catch (ClassCastException ignored) {
+//          parent = null;
+//        }
+//        if (parent instanceof ScrollView) {
+//          Log.i(this.getClass().getSimpleName(), "onFocusChanged: FOCUSED Setting SOFT_INPUT_ADJUST_PAN, found collection parent: " + parent.getClass().getName());
+//          setSoftInput(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        }
+//      } while (parent != null);
+//    } else {
+//      Log.i(this.getClass().getSimpleName(), "onFocusChanged: DEFOCUSED Setting SOFT_INPUT_ADJUST_RESIZE");
+//      setSoftInput(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//    }
+
     super.onFocusChanged(focused, direction, previouslyFocusedRect);
     if (focused && mSelectionWatcher != null) {
       mSelectionWatcher.onSelectionChanged(getSelectionStart(), getSelectionEnd());
     }
   }
+
+//  private void setSoftInput(int inputType) {
+//    ReactContext reactContext = (ReactContext) getContext();
+//    if (reactContext != null) {
+//      Activity activity = reactContext.getCurrentActivity();
+//      if (activity != null) {
+//        Window window = activity.getWindow();
+//        if (window != null) {
+//          window.setSoftInputMode(inputType);
+//        } else {
+//          Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, window is null");
+//        }
+//      } else {
+//        Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, activity is null");
+//      }
+//    } else {
+//      Log.e(this.getClass().getSimpleName(), "setSoftInput: Failed, reactContext is null");
+//    }
+//  }
 
   public void setSelectionWatcher(SelectionWatcher selectionWatcher) {
     mSelectionWatcher = selectionWatcher;
@@ -484,7 +539,7 @@ public class ReactEditText extends EditText {
     // reset some of these spans even if they are set directly, SpannableStringBuilder#replace() is
     // used instead (this is also used by the the keyboard implementation underneath the covers).
     SpannableStringBuilder spannableStringBuilder =
-        new SpannableStringBuilder(reactTextUpdate.getText());
+      new SpannableStringBuilder(reactTextUpdate.getText());
     manageSpans(spannableStringBuilder);
     mContainsImages = reactTextUpdate.containsImages();
 
@@ -527,7 +582,7 @@ public class ReactEditText extends EditText {
       }
 
       if ((getText().getSpanFlags(spans[spanIdx]) & Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-          != Spanned.SPAN_EXCLUSIVE_EXCLUSIVE) {
+        != Spanned.SPAN_EXCLUSIVE_EXCLUSIVE) {
         continue;
       }
       Object span = spans[spanIdx];
@@ -545,10 +600,10 @@ public class ReactEditText extends EditText {
   }
 
   private static boolean sameTextForSpan(
-      final Editable oldText,
-      final SpannableStringBuilder newText,
-      final int start,
-      final int end) {
+    final Editable oldText,
+    final SpannableStringBuilder newText,
+    final int start,
+    final int end) {
     if (start > newText.length() || end > newText.length()) {
       return false;
     }
@@ -581,8 +636,8 @@ public class ReactEditText extends EditText {
 
   private boolean isSecureText() {
     return (getInputType()
-            & (InputType.TYPE_NUMBER_VARIATION_PASSWORD | InputType.TYPE_TEXT_VARIATION_PASSWORD))
-        != 0;
+      & (InputType.TYPE_NUMBER_VARIATION_PASSWORD | InputType.TYPE_TEXT_VARIATION_PASSWORD))
+      != 0;
   }
 
   private void onContentSizeChange() {
@@ -613,10 +668,10 @@ public class ReactEditText extends EditText {
       gravityHorizontal = mDefaultGravityHorizontal;
     }
     setGravity(
-        (getGravity()
-                & ~Gravity.HORIZONTAL_GRAVITY_MASK
-                & ~Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
-            | gravityHorizontal);
+      (getGravity()
+        & ~Gravity.HORIZONTAL_GRAVITY_MASK
+        & ~Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK)
+        | gravityHorizontal);
   }
 
   /* package */ void setGravityVertical(int gravityVertical) {
@@ -717,6 +772,13 @@ public class ReactEditText extends EditText {
   @Override
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
+    try {
+      Log.d("onAttachedToWindow", "Re-enabling..");
+      super.setEnabled(false);
+      super.setEnabled(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     if (mContainsImages) {
       Spanned text = getText();
       TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
@@ -849,7 +911,8 @@ public class ReactEditText extends EditText {
 
     private int mInputType = 0;
 
-    public InternalKeyListener() {}
+    public InternalKeyListener() {
+    }
 
     public void setInputType(int inputType) {
       mInputType = inputType;
