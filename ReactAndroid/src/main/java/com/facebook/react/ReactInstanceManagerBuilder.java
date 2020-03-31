@@ -15,8 +15,8 @@ import android.app.Application;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
-import com.facebook.infer.annotation.Assertions;
 import com.facebook.hermes.reactexecutor.HermesExecutorFactory;
+import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.JSBundleLoader;
 import com.facebook.react.bridge.JSIModulePackage;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
