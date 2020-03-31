@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 public class HermesExecutor extends JavaScriptExecutor {
   private static String mode_;
-
   static {
     // libhermes must be loaded explicitly to invoke its JNI_OnLoad.
     SoLoader.loadLibrary("hermes");

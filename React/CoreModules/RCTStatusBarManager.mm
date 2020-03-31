@@ -159,6 +159,7 @@ RCT_EXPORT_METHOD(setStyle : (NSString *)style animated : (BOOL)animated)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [RCTSharedApplication() setStatusBarStyle:statusBarStyle animated:animated];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"GLStatusBarStyleDidChangeNotification" object:[NSNumber numberWithInteger:statusBarStyle]]; 
   }
 #pragma clang diagnostic pop
 }

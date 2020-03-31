@@ -41,14 +41,30 @@ NSString *const RCTBridgeDidDownloadScriptNotificationSourceKey = @"source";
 NSString *const RCTBridgeDidDownloadScriptNotificationBridgeDescriptionKey = @"bridgeDescription";
 
 static NSMutableArray<Class> *RCTModuleClasses;
+static BOOL TwobirdSettingUpWorkersQueue = NO;
 static dispatch_queue_t RCTModuleClassesSyncQueue;
 NSArray<Class> *RCTGetModuleClasses(void)
 {
   __block NSArray<Class> *result;
   dispatch_sync(RCTModuleClassesSyncQueue, ^{
     result = [RCTModuleClasses copy];
+    // CodePush expects to only be instantiated once, so we have to skip it while
+    // setting up the bridge for the RNWorkers module.  See RNWorkersManager.m patch.
+    if (TwobirdSettingUpWorkersQueue) {
+      result = [result filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(id  _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        NSString *className = NSStringFromClass(evaluatedObject);
+        return ![className isEqualToString:@"CodePush"] && ![className isEqualToString:@"RNDarkMode"];
+      }]];
+    }
   });
   return result;
+}
+
+void SetTwobirdSettingUpWorkersQueue(BOOL value)
+{
+  dispatch_barrier_async(RCTModuleClassesSyncQueue, ^{
+    TwobirdSettingUpWorkersQueue = value;
+  });
 }
 
 /**
