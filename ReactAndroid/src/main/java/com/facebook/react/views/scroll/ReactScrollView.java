@@ -232,7 +232,7 @@ public class ReactScrollView extends ScrollView
         Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
         scrollTo(getScrollX(), getMaxScrollY());
       } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
-         No Need for this apparently.
+        // No Need for this apparently.
         int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
         int index = getIndexOfFirstVisibleView(minIndexForVisible);
         Log.d(getClass().getSimpleName(), "onSizeChanged: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
