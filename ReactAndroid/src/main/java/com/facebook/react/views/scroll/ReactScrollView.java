@@ -230,17 +230,26 @@ public class ReactScrollView extends ScrollView
     Log.d(this.getClass().getSimpleName(), "onSizeChanged: " + mChatBehavior + ", h: " + h + ", oldh: " + oldh);
     if (oldh != 0 && mChatBehavior && h < oldh) {
       boolean scrollToBottom = getMaxScrollY() - getScrollY() < 10;
-      if (scrollToBottom) {
-        Log.d(this.getClass().getSimpleName(), "onSizeChanged: scrollToBottom: " + getScrollY() + ", getMaxScrollY: " + getMaxScrollY());
-        scrollTo(getScrollX(), getMaxScrollY()) ;
-      } else {
-        Log.d(this.getClass().getSimpleName(), "scrollToBottom: "  + getScrollY() + ", getMaxScrollY: " + getMaxScrollY());
-      }
+//      if (scrollToBottom) {
+//        Log.d(this.getClass().getSimpleName(), "onSizeChanged: scrollToBottom: " + getScrollY() + ", getMaxScrollY: " + getMaxScrollY());
+//        scrollTo(getScrollX(), getMaxScrollY()) ;
+//
+//      } else {
+//        Log.d(this.getClass().getSimpleName(), "scrollToBottom: "  + getScrollY() + ", getMaxScrollY: " + getMaxScrollY());
+//      }
 //      else {
 //        int scrollBy = oldh - h;
 //        Log.d(this.getClass().getSimpleName(), "scrollBy: " + scrollBy + ", getScrollY:" + getScrollY() + ", getMaxScrollY: " + getMaxScrollY());
 //        scrollTo(getScrollX(), getScrollY() + scrollBy);
 //      }
+
+      if (mChatBehavior && isScrollAtEnd(oldh - h)) {
+        Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + getMaxScrollY());
+        int mode = getOverScrollMode();
+        setOverScrollMode(OVER_SCROLL_NEVER);
+        scrollTo(getScrollX(), getMaxScrollY());
+        setOverScrollMode(mode);
+      }
     }
     super.onSizeChanged(w, h, oldw, oldh);
     if (mRemoveClippedSubviews) {
