@@ -245,30 +245,6 @@ public class ReactScrollView extends ScrollView
     }
   }
 
-  // Do not use minIndexForVisible for now, it's 0 anyways.
-//  private int getIndexOfFirstVisibleView(int minIndexForVisible) {
-//    int scrollY = getScrollY();
-//    int heightCount = 0;
-//    int indexCount = 0;
-//
-//    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
-//
-//    for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
-//      View child = contentViewGroup.getChildAt(i);
-//      // Iterate the inner groups.
-//      if (heightCount > scrollY) {
-//        Log.d(this.getClass().getSimpleName(), "getIndexOfFirstVisibleView: indexCount: " + indexCount + ", minIndexForVisible: " + minIndexForVisible);
-//        return indexCount < minIndexForVisible ? minIndexForVisible : indexCount;
-//      } else {
-//        heightCount += child.getHeight();
-//        indexCount++;
-//      }
-//    }
-//    Log.e(getClass().getSimpleName(), "getIndexOfFirstVisibleView: Did not find the visible view, returning -1.");
-//    // Return last one as default, scroll to bottom.
-//    return -1;
-//  }
-
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
