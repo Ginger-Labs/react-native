@@ -228,10 +228,6 @@ public class ReactScrollView extends ScrollView
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     Log.d(this.getClass().getSimpleName(), "onSizeChanged: " + mChatBehavior + ", h: " + h + ", oldh: " + oldh);
-    super.onSizeChanged(w, h, oldw, oldh);
-    if (mRemoveClippedSubviews) {
-      updateClippingRect();
-    }
     if (oldh != 0 && mChatBehavior && h < oldh) {
       boolean scrollToBottom = getMaxScrollY() - getScrollY() < 10;
       if (scrollToBottom) {
@@ -245,6 +241,10 @@ public class ReactScrollView extends ScrollView
 //        Log.d(this.getClass().getSimpleName(), "scrollBy: " + scrollBy + ", getScrollY:" + getScrollY() + ", getMaxScrollY: " + getMaxScrollY());
 //        scrollTo(getScrollX(), getScrollY() + scrollBy);
 //      }
+    }
+    super.onSizeChanged(w, h, oldw, oldh);
+    if (mRemoveClippedSubviews) {
+      updateClippingRect();
     }
   }
 
