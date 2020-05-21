@@ -236,9 +236,9 @@ public class ReactScrollView extends ScrollView
       int scrollBy = oldh - h;
       Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
       if (scrollToBottom) {
-        scrollTo(getScrollX(), getMaxScrollY());
+        scrollTo(getScrollY(), getMaxScrollY());
       } else {
-        scrollTo(getScrollX() + scrollBy, getMaxScrollY());
+        scrollTo(getScrollY() + scrollBy, getMaxScrollY());
       }
     }
   }
