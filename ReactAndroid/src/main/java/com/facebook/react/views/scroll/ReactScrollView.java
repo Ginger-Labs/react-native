@@ -233,13 +233,13 @@ public class ReactScrollView extends ScrollView
     }
     if (oldh != 0 && mChatBehavior && h < oldh) {
       boolean scrollToBottom = getMaxScrollY() - getScrollY() < 10;
-      int scrollBy = oldh - h;
       if (scrollToBottom) {
         Log.d(this.getClass().getSimpleName(), "scrollToBottom");
         scrollTo(getScrollX(), getMaxScrollY());
       } else {
-        Log.d(this.getClass().getSimpleName(), "scrollBy: " + scrollBy + ", getScrollY:" + getScrollY() + ", getMaxScrollY: " + getMaxScrollY());
-        scrollTo(getScrollX(), getScrollY() + scrollBy);
+//        int scrollBy = oldh - h;
+//        Log.d(this.getClass().getSimpleName(), "scrollBy: " + scrollBy + ", getScrollY:" + getScrollY() + ", getMaxScrollY: " + getMaxScrollY());
+//        scrollTo(getScrollX(), getScrollY() + scrollBy);
       }
     }
   }
