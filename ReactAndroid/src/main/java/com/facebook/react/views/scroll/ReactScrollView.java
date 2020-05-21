@@ -232,7 +232,7 @@ public class ReactScrollView extends ScrollView
       updateClippingRect();
     }
     if (oldh != 0 && mChatBehavior && h < oldh) {
-      boolean scrollToBottom = getMaxScrollX() - getScrollX() < 10;
+      boolean scrollToBottom = getMaxScrollY() - getScrollY() < 10;
       int scrollBy = oldh - h;
       Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
       if (scrollToBottom) {
