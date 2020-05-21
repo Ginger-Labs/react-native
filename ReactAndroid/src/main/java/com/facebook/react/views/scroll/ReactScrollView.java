@@ -227,20 +227,15 @@ public class ReactScrollView extends ScrollView
   /** Comment for now and remove later if proven working.*/
   @Override
   protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+    if (mRemoveClippedSubviews) {
+      updateClippingRect();
+    }
     if (oldh != 0) {
       if (mChatBehavior && h < oldh) {
         Log.d(this.getClass().getSimpleName(), "onSizeChanged: h < old");
         scrollTo(getScrollX(), getMaxScrollY());
-      } else if (mMaintainVisibleContentPosition != null && mMaintainVisibleContentPosition.hasKey("minIndexForVisible")) {
-        int minIndexForVisible = mMaintainVisibleContentPosition.getInt("minIndexForVisible");
-        int index = getIndexOfFirstVisibleView(minIndexForVisible);
-        Log.d(getClass().getSimpleName(), "onSizeChanged: mMaintainVisibleContentPosition: minIndexForVisible: " + minIndexForVisible + ", index: " + index);
-        if (index != -1) scrollToIndex(index, false);
       }
-    }
-    super.onSizeChanged(w, h, oldw, oldh);
-    if (mRemoveClippedSubviews) {
-      updateClippingRect();
     }
   }
 
