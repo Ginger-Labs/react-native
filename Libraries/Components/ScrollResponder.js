@@ -18,6 +18,8 @@ const ReactNative = require('../Renderer/shims/ReactNative');
 const TextInputState = require('./TextInput/TextInputState');
 const UIManager = require('../ReactNative/UIManager');
 const Platform = require('../Utilities/Platform');
+const nullthrows = require('nullthrows');
+
 import Commands from './ScrollView/ScrollViewCommands';
 
 const invariant = require('invariant');
@@ -497,6 +499,17 @@ const ScrollResponderMixin = {
       return;
     }
     Commands.scrollTo(nativeScrollRef, x || 0, y || 0, animated !== false);
+  },
+
+  scrollResponderScrollToIndex: function(
+    index: number,
+    animated?: boolean,
+  ) {
+    UIManager.dispatchViewManagerCommand(
+      nullthrows(this.scrollResponderGetScrollableNode()),
+      UIManager.getViewManagerConfig('RCTScrollView').Commands.scrollToIndex,
+      [index, animated !== false],
+    );
   },
 
   /**
