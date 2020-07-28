@@ -7,7 +7,6 @@
 
 package com.facebook.react.jstasks;
 
-import android.util.Log;
 import android.os.Handler;
 import android.util.SparseArray;
 import com.facebook.infer.annotation.Assertions;
@@ -101,12 +100,10 @@ public class HeadlessJsTaskContext {
             "Tried to start a task on a react context that has already been destroyed");
     if (reactContext.getLifecycleState() == LifecycleState.RESUMED
         && !taskConfig.isAllowedInForeground()) {
-        Log.e(this.getClass().getSimpleName(), "startTask: Failed to run task, app is in foreground");
-        //      throw new IllegalStateException(
-        //          "Tried to start task "
-        //              + taskConfig.getTaskKey()
-        //              + " while in foreground, but this is not allowed.");
-        return;
+      throw new IllegalStateException(
+          "Tried to start task "
+              + taskConfig.getTaskKey()
+              + " while in foreground, but this is not allowed.");
     }
     mActiveTasks.add(taskId);
     mActiveTaskConfigs.put(taskId, new HeadlessJsTaskConfig(taskConfig));
