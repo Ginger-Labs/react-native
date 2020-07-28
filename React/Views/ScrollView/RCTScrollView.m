@@ -957,25 +957,6 @@ RCT_SCROLL_EVENT_HANDLER(scrollViewDidScrollToTop, onScrollToTop)
 - (void)uiManagerWillPerformMounting:(RCTUIManager *)manager
 {
   RCTAssertUIManagerQueue();
-<<<<<<< HEAD
-  [manager
-      prependUIBlock:^(__unused RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, UIView *> *viewRegistry) {
-        BOOL horz = [self isHorizontal:self->_scrollView];
-        NSUInteger minIdx = [self->_maintainVisibleContentPosition[@"minIndexForVisible"] integerValue];
-        for (NSUInteger ii = minIdx; ii < self->_contentView.subviews.count; ++ii) {
-          // Find the first entirely visible view. This must be done after we update the content offset
-          // or it will tend to grab rows that were made visible by the shift in position
-          UIView *subview = self->_contentView.subviews[ii];
-          if ((horz ? subview.frame.origin.x >= self->_scrollView.contentOffset.x
-                    : subview.frame.origin.y >= self->_scrollView.contentOffset.y) ||
-              ii == self->_contentView.subviews.count - 1) {
-            self->_prevFirstVisibleFrame = subview.frame;
-            self->_firstVisibleView = subview;
-            break;
-          }
-        }
-      }];
-=======
   [manager prependUIBlock:^(__unused RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, UIView *> *viewRegistry) {
     BOOL horz = [self isHorizontal:self->_scrollView];
     NSUInteger minIdx = [self->_maintainVisibleContentPosition[@"minIndexForVisible"] integerValue];
@@ -997,7 +978,6 @@ RCT_SCROLL_EVENT_HANDLER(scrollViewDidScrollToTop, onScrollToTop)
       }
     }
   }];
->>>>>>> 0.62.2-gl002
   [manager addUIBlock:^(__unused RCTUIManager *uiManager, __unused NSDictionary<NSNumber *, UIView *> *viewRegistry) {
     if (!self->_chatBehavior) {
       return; // The prop might have changed in the previous UIBlocks, so need to abort here.
