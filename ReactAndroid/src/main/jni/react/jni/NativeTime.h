@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import <React/Base/RCTDefines.h>
+#import <React/RCTDefines.h>
 
 namespace facebook {
 namespace react {
