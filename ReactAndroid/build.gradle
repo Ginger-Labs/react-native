@@ -105,25 +105,25 @@ task prepareFolly(dependsOn: dependenciesPath ? [] : [downloadFolly], type: Copy
     into("$thirdPartyNdkDir/folly")
 }
 
-//task prepareHermes() {
-//    def hermesPackagePath = findNodeModulePath(projectDir, "hermes-engine")
-//    if (!hermesPackagePath) {
-//        throw new GradleScriptException("Could not find the hermes-engine npm package")
-//    }
-//
-//    def hermesAAR = file("$hermesPackagePath/android/hermes-debug.aar")
-//    if (!hermesAAR.exists()) {
-//        throw new GradleScriptException("The hermes-engine npm package is missing \"android/hermes-debug.aar\"")
-//    }
-//
-//    def soFiles = zipTree(hermesAAR).matching({ it.include "**/*.so" })
-//
-//    copy {
-//        from soFiles
-//        from "src/main/jni/first-party/hermes/Android.mk"
-//        into "$thirdPartyNdkDir/hermes"
-//    }
-//}
+task prepareHermes() {
+    def hermesPackagePath = findNodeModulePath(projectDir, "hermes-engine")
+    if (!hermesPackagePath) {
+        throw new GradleScriptException("Could not find the hermes-engine npm package")
+    }
+
+    def hermesAAR = file("$hermesPackagePath/android/hermes-debug.aar")
+    if (!hermesAAR.exists()) {
+        throw new GradleScriptException("The hermes-engine npm package is missing \"android/hermes-debug.aar\"")
+    }
+
+    def soFiles = zipTree(hermesAAR).matching({ it.include "**/*.so" })
+
+    copy {
+        from soFiles
+        from "src/main/jni/first-party/hermes/Android.mk"
+        into "$thirdPartyNdkDir/hermes"
+    }
+}
 
 task downloadGlog(dependsOn: createNativeDepsDirectories, type: Download) {
     src("https://github.com/google/glog/archive/v${GLOG_VERSION}.tar.gz")
