@@ -113,7 +113,7 @@ afterEvaluate {
             execCommand.addAll([npx, "react-native"])
         }
 
-        def enableHermes = true
+        def enableHermes = enableHermesForVariant(variant)
 
         def currentBundleTask = tasks.create(
             name: "bundle${targetName}JsAndAssets",
@@ -166,7 +166,7 @@ afterEvaluate {
                         if (targetName.toLowerCase().contains("release")) {
                             // Can't use ?: since that will also substitute valid empty lists
                             hermesFlags = config.hermesFlagsRelease
-                            if (hermesFlags == null) hermesFlags = ["-O", "-output-source-map"]
+                            if (hermesFlags == null) hermesFlags = ["-O"]
                         } else {
                             hermesFlags = config.hermesFlagsDebug
                             if (hermesFlags == null) hermesFlags = []
