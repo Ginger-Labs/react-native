@@ -9,6 +9,7 @@ package com.facebook.react.views.textinput;
 
 import static com.facebook.react.uimanager.UIManagerHelper.getReactContext;
 
+import android.util.Log;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -722,6 +723,13 @@ public class ReactEditText extends AppCompatEditText {
   @Override
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
+    try {
+      Log.d("onAttachedToWindow", "Re-enabling..");
+      super.setEnabled(false);
+      super.setEnabled(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     if (mContainsImages) {
       Spanned text = getText();
       TextInlineImageSpan[] spans = text.getSpans(0, text.length(), TextInlineImageSpan.class);
