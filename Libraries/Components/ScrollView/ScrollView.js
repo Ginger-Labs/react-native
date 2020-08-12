@@ -791,6 +791,7 @@ class ScrollView extends React.Component<Props, State> {
         ref.getInnerViewRef = this.getInnerViewRef;
         ref.getNativeScrollRef = this.getNativeScrollRef;
         ref.scrollTo = this.scrollTo;
+        ref.scrollToIndex = this.scrollToIndex;
         ref.scrollToEnd = this.scrollToEnd;
         ref.flashScrollIndicators = this.flashScrollIndicators;
 
@@ -884,7 +885,7 @@ class ScrollView extends React.Component<Props, State> {
     });
   };
 
-  scrollToIndex(options: {index: number, animated?: boolean}) {
+  scrollToIndex = (options: {index: number, animated?: boolean}) => {
     this._scrollResponder.scrollResponderScrollToIndex(options.index, options.animated);
   }
 

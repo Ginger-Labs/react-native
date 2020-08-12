@@ -18,6 +18,7 @@ const ReactNative = require('../Renderer/shims/ReactNative');
 const TextInputState = require('./TextInput/TextInputState');
 const UIManager = require('../ReactNative/UIManager');
 const Platform = require('../Utilities/Platform');
+const nullthrows = require('nullthrows');
 import Commands from './ScrollView/ScrollViewCommands';
 
 const invariant = require('invariant');
