@@ -232,8 +232,6 @@ public class ReactScrollView extends ScrollView
       updateClippingRect();
     }
     boolean isAtEnd = isScrollAtEnd(oldh - h);
-    Log.e(getClass().getCanonicalName(), "onSizeChanged: isAtEnd:" + isAtEnd);
-    Log.e(getClass().getCanonicalName(), "onSizeChanged: mChatBehavior:" + mChatBehavior);
     int maxScrollY = getMaxScrollY();
     if (mChatBehavior && isAtEnd) {
       Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
@@ -894,7 +892,6 @@ public class ReactScrollView extends ScrollView
   }
 
   private boolean isScrollAtEnd(int heightDiff) {
-    Log.e(getClass().getCanonicalName(), "onSizeChanged: heightDiff:" + heightDiff);
     int currentScrollY = getScrollY();
     int viewportHeight = getHeight() - getPaddingBottom() - getPaddingTop();
     return (currentScrollY + viewportHeight == mContentView.getHeight() - heightDiff);
