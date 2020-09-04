@@ -231,17 +231,6 @@ public class ReactScrollView extends ScrollView
     if (mRemoveClippedSubviews) {
       updateClippingRect();
     }
-    boolean isAtEnd = isScrollAtEnd(oldh - h);
-    Log.e(getClass().getCanonicalName(), "onSizeChanged: isAtEnd:" + isAtEnd);
-    Log.e(getClass().getCanonicalName(), "onSizeChanged: mChatBehavior:" + mChatBehavior);
-    int maxScrollY = getMaxScrollY();
-    if (mChatBehavior && isAtEnd) {
-      Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
-      int mode = getOverScrollMode();
-      setOverScrollMode(OVER_SCROLL_NEVER);
-      scrollTo(getScrollX(), maxScrollY);
-      setOverScrollMode(mode);
-    }
   }
 
   @Override
@@ -891,10 +880,16 @@ public class ReactScrollView extends ScrollView
     if (currentScrollY > maxScrollY) {
       reactScrollTo(getScrollX(), maxScrollY);
     }
+    if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
+      Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
+      int mode = getOverScrollMode();
+      setOverScrollMode(OVER_SCROLL_NEVER);
+      scrollTo(getScrollX(), maxScrollY);
+      setOverScrollMode(mode);
+    }
   }
 
   private boolean isScrollAtEnd(int heightDiff) {
-    Log.e(getClass().getCanonicalName(), "onSizeChanged: heightDiff:" + heightDiff);
     int currentScrollY = getScrollY();
     int viewportHeight = getHeight() - getPaddingBottom() - getPaddingTop();
     return (currentScrollY + viewportHeight == mContentView.getHeight() - heightDiff);
