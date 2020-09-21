@@ -231,15 +231,18 @@ public class ReactScrollView extends ScrollView
     if (mRemoveClippedSubviews) {
       updateClippingRect();
     }
-    boolean isAtEnd = isScrollAtEnd(oldh - h);
     int maxScrollY = getMaxScrollY();
-    if (mChatBehavior && isAtEnd) {
-      Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
-      int mode = getOverScrollMode();
-      setOverScrollMode(OVER_SCROLL_NEVER);
-      scrollTo(getScrollX(), maxScrollY);
-      setOverScrollMode(mode);
+    if (mChatBehavior && isScrollAtEnd(oldh - h)) {
+      scrollToYWithMode(maxScrollY);
     }
+  }
+
+  private void scrollToYWithMode(int maxScrollY) {
+    Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
+    int mode = getOverScrollMode();
+    setOverScrollMode(OVER_SCROLL_NEVER);
+    scrollTo(getScrollX(), maxScrollY);
+    setOverScrollMode(mode);
   }
 
   @Override
@@ -890,11 +893,7 @@ public class ReactScrollView extends ScrollView
       reactScrollTo(getScrollX(), maxScrollY);
     }
     if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
-      Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
-      int mode = getOverScrollMode();
-      setOverScrollMode(OVER_SCROLL_NEVER);
-      scrollTo(getScrollX(), maxScrollY);
-      setOverScrollMode(mode);
+      scrollToYWithMode(maxScrollY);
     }
   }
 
