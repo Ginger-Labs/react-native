@@ -7,6 +7,7 @@
 
 package com.facebook.react.uimanager;
 
+import android.util.Log;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.view.View;
@@ -28,14 +29,14 @@ public class ShadowNodeRegistry {
     mThreadAsserter = new SingleThreadAsserter();
   }
 
-  public void addRootNode(ReactShadowNode node) {
+  public synchronized void addRootNode(ReactShadowNode node) {
     mThreadAsserter.assertNow();
     int tag = node.getReactTag();
     mTagsToCSSNodes.put(tag, node);
     mRootTags.put(tag, true);
   }
 
-  public void removeRootNode(int tag) {
+  public synchronized void removeRootNode(int tag) {
     mThreadAsserter.assertNow();
     if (tag == View.NO_ID) {
       // This root node has already been removed (likely due to a threading issue caused by async js
@@ -51,36 +52,36 @@ public class ShadowNodeRegistry {
     mRootTags.delete(tag);
   }
 
-  public void addNode(ReactShadowNode node) {
+  public synchronized void addNode(ReactShadowNode node) {
     mThreadAsserter.assertNow();
     mTagsToCSSNodes.put(node.getReactTag(), node);
   }
 
-  public void removeNode(int tag) {
+  public synchronized void removeNode(int tag) {
     mThreadAsserter.assertNow();
     if (mRootTags.get(tag)) {
-      throw new IllegalViewOperationException(
-          "Trying to remove root node " + tag + " without using removeRootNode!");
+      // Twobird: 0.63.2-gl006, fix synchronization view bug
+      Log.e(this.getClass().getCanonicalName(), "Trying to remove root node " + tag + " without using removeRootNode!");
     }
     mTagsToCSSNodes.remove(tag);
   }
 
-  public ReactShadowNode getNode(int tag) {
+  public synchronized ReactShadowNode getNode(int tag) {
     mThreadAsserter.assertNow();
     return mTagsToCSSNodes.get(tag);
   }
 
-  public boolean isRootNode(int tag) {
+  public synchronized boolean isRootNode(int tag) {
     mThreadAsserter.assertNow();
     return mRootTags.get(tag);
   }
 
-  public int getRootNodeCount() {
+  public synchronized int getRootNodeCount() {
     mThreadAsserter.assertNow();
     return mRootTags.size();
   }
 
-  public int getRootTag(int index) {
+  public synchronized int getRootTag(int index) {
     mThreadAsserter.assertNow();
     return mRootTags.keyAt(index);
   }
