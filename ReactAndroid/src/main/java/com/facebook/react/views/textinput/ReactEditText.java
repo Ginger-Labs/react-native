@@ -10,6 +10,7 @@ package com.facebook.react.views.textinput;
 import static com.facebook.react.uimanager.UIManagerHelper.getReactContext;
 import static com.facebook.react.views.text.TextAttributeProps.UNSET;
 
+import android.util.Log;
 import android.content.Context;
 import android.graphics.Rect;
 import android.graphics.Typeface;
@@ -852,11 +853,17 @@ public class ReactEditText extends AppCompatEditText
   @Override
   public void onAttachedToWindow() {
     super.onAttachedToWindow();
+    try {
+      Log.d("onAttachedToWindow", "Re-enabling..");
+      super.setEnabled(false);
+      super.setEnabled(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     // Used to ensure that text is selectable inside of removeClippedSubviews
     // See https://github.com/facebook/react-native/issues/6805 for original
     // fix that was ported to here.
-
     super.setTextIsSelectable(true);
 
     if (mContainsImages) {

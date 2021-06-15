@@ -11,11 +11,16 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.util.DisplayMetrics;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.views.view.ReactViewGroup;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -99,6 +104,11 @@ public class ReactScrollView extends ScrollView
   private int mLastStateUpdateScrollX = -1;
   private int mLastStateUpdateScrollY = -1;
 
+  private boolean mChatBehavior = false;
+  private ReadableMap mMaintainVisibleContentPosition;
+
+  private static final boolean DEBUG = false;
+
   public ReactScrollView(ReactContext context) {
     this(context, null);
   }
@@ -107,6 +117,18 @@ public class ReactScrollView extends ScrollView
     super(context);
     mFpsListener = fpsListener;
     mReactBackgroundManager = new ReactViewBackgroundManager(this);
+
+    if (DEBUG) {
+      DisplayMetrics displayMetrics = new DisplayMetrics();
+      Activity activity = context.getCurrentActivity();
+      if (activity != null) {
+        activity .getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        Log.d(this.getClass().getSimpleName(), "ReactScrollView: display height: " + displayMetrics.heightPixels);
+      } else {
+        Log.e(this.getClass().getSimpleName(), "ReactScrollView: activity is null.");
+      }
+
+    }
 
     mScroller = getOverScrollerFromParent();
     setOnHierarchyChangeListener(this);
@@ -232,6 +254,18 @@ public class ReactScrollView extends ScrollView
     if (mRemoveClippedSubviews) {
       updateClippingRect();
     }
+    int maxScrollY = getMaxScrollY();
+    if (mChatBehavior && isScrollAtEnd(oldh - h)) {
+      scrollToYWithMode(maxScrollY);
+    }
+  }
+
+  private void scrollToYWithMode(int maxScrollY) {
+    Log.d(getClass().getSimpleName(), "onLayoutChange: was at bottom, moving to maxScrollY of: " + maxScrollY);
+    int mode = getOverScrollMode();
+    setOverScrollMode(OVER_SCROLL_NEVER);
+    scrollTo(getScrollX(), maxScrollY);
+    setOverScrollMode(mode);
   }
 
   @Override
@@ -464,6 +498,10 @@ public class ReactScrollView extends ScrollView
     int contentHeight = mContentView.getHeight();
     int viewportHeight = getHeight() - getPaddingBottom() - getPaddingTop();
     return Math.max(0, contentHeight - viewportHeight);
+  }
+
+  public View getContentView() {
+    return mContentView;
   }
 
   @Override
@@ -808,6 +846,36 @@ public class ReactScrollView extends ScrollView
     super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
   }
 
+  public void scrollToIndex(int index, boolean animated) {
+    Log.d(getClass().getSimpleName(), "scrollToIndex: " + index + ", anim: " + animated);
+    // This is to make sure we include the header too.
+    View child = getChildAtIndex(index);
+    if (child == null) {
+      Log.e(getClass().getSimpleName(), "scrollToIndex: skipping because getSubChildAtTotalIndex: " + index + " returned null");
+      return;
+    }
+    int scrollTo = child.getTop();
+
+    if (DEBUG) {
+      child.setBackgroundColor(Color.BLUE);
+      Log.d(this.getClass().getSimpleName(), "scrollToIndex: scrollTo: " + scrollTo);
+      Log.d(this.getClass().getSimpleName(), "scrollToIndex:  getHeight(): " +  getHeight());
+      Log.d(this.getClass().getSimpleName(), "scrollToIndex:  getScrollY(): " +  getScrollY());
+    }
+
+    if (animated) {
+      smoothScrollTo(0, scrollTo);
+    } else {
+      scrollTo(0, scrollTo);
+    }
+  }
+
+  private View getChildAtIndex(int index) {
+    ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
+    return contentViewGroup.getChildAt(index);
+  }
+
+
   @Override
   public void onChildViewAdded(View parent, View child) {
     mContentView = child;
@@ -926,12 +994,39 @@ public class ReactScrollView extends ScrollView
       return;
     }
 
+    if (DEBUG) {
+      ReactViewGroup contentViewGroup = ((ReactViewGroup) mContentView);
+      for (int i = 0; i < contentViewGroup.getChildCount(); i++) {
+        View child = contentViewGroup.getChildAt(i);
+        int color = i % 2 == 0 ? Color.RED : Color.GREEN;
+        child.setBackgroundColor(color);
+      }
+    }
+
     int currentScrollY = getScrollY();
     int maxScrollY = getMaxScrollY();
     if (currentScrollY > maxScrollY) {
       reactScrollTo(getScrollX(), maxScrollY);
     }
+    if (mChatBehavior && isScrollAtEnd(bottom - oldBottom)) {
+      scrollToYWithMode(maxScrollY);
+    }
   }
+
+  private boolean isScrollAtEnd(int heightDiff) {
+    int currentScrollY = getScrollY();
+    int viewportHeight = getHeight() - getPaddingBottom() - getPaddingTop();
+    return (currentScrollY + viewportHeight == mContentView.getHeight() - heightDiff);
+  }
+
+  public void setChatBehavior(boolean chatBehavior) {
+    mChatBehavior = chatBehavior;
+  }
+
+  public void setMaintainVisibleContentPosition(ReadableMap maintainVisibleContentPosition) {
+    mMaintainVisibleContentPosition = maintainVisibleContentPosition;
+  }
+
 
   @Override
   public void setBackgroundColor(int color) {

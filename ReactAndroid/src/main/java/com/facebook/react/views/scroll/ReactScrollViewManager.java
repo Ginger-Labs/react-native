@@ -178,6 +178,16 @@ public class ReactScrollViewManager extends ViewGroupManager<ReactScrollView>
     ViewCompat.setNestedScrollingEnabled(view, value);
   }
 
+  @ReactProp(name = "chatBehavior")
+  public void setChatBehavior(ReactScrollView view, boolean value) {
+    view.setChatBehavior(value);
+  }
+
+  @ReactProp(name = "maintainVisibleContentPosition")
+  public void setMaintainVisibleContentPosition(ReactScrollView view, ReadableMap value) {
+    view.setMaintainVisibleContentPosition(value);
+  }
+
   @Override
   public @Nullable Map<String, Integer> getCommandsMap() {
     return ReactScrollViewCommandHelper.getCommandsMap();
@@ -198,6 +208,11 @@ public class ReactScrollViewManager extends ViewGroupManager<ReactScrollView>
   @Override
   public void flashScrollIndicators(ReactScrollView scrollView) {
     scrollView.flashScrollIndicators();
+  }
+
+  @Override
+  public void scrollToIndex(ReactScrollView scrollView, int index, boolean animated) {
+    scrollView.scrollToIndex(index, animated);
   }
 
   @Override
