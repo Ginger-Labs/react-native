@@ -155,7 +155,7 @@
   [attributedText removeAttribute:RCTTextAttributesTagAttributeName
                             range:NSMakeRange(0, attributedText.length)];
 
-  if (self.text.length) {
+  if (self.text.length && !attributedText.length) {
     NSAttributedString *propertyAttributedText =
       [[NSAttributedString alloc] initWithString:self.text
                                       attributes:self.textAttributes.effectiveTextAttributes];

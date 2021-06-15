@@ -151,6 +151,7 @@ RCT_EXTERN NSString *RCTBridgeModuleNameForClass(Class bridgeModuleClass);
  */
 RCT_EXTERN BOOL RCTTurboModuleEnabled(void);
 RCT_EXTERN void RCTEnableTurboModule(BOOL enabled);
+RCT_EXTERN void SetTwobirdSettingUpWorkersQueue(BOOL value);
 
 // Turn on TurboModule eager initialization
 RCT_EXTERN BOOL RCTTurboModuleEagerInitEnabled(void);
