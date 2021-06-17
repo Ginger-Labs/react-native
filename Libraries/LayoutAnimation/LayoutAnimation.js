@@ -32,7 +32,7 @@ function configureNext(
   onAnimationDidFail?: OnAnimationDidFailCallback,
 ) {
   if (!Platform.isTesting) {
-    if (UIManager?.configureNextLayoutAnimation) {
+    if (UIManager && UIManager.configureNextLayoutAnimation) {
       UIManager.configureNextLayoutAnimation(
         config,
         onAnimationDidEnd ?? function() {},
@@ -40,9 +40,9 @@ function configureNext(
           function() {} /* this should never be called in Non-Fabric */,
       );
     }
-    const FabricUIManager: FabricUIManagerSpec = global?.nativeFabricUIManager;
-    if (FabricUIManager?.configureNextLayoutAnimation) {
-      global?.nativeFabricUIManager?.configureNextLayoutAnimation(
+    const FabricUIManager: FabricUIManagerSpec = global && global.nativeFabricUIManager;
+    if (FabricUIManager && FabricUIManager.configureNextLayoutAnimation) {
+    global.nativeFabricUIManager.configureNextLayoutAnimation(
         config,
         onAnimationDidEnd ?? function() {},
         onAnimationDidFail ??
