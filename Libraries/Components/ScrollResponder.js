@@ -13,7 +13,6 @@
 const Dimensions = require('../Utilities/Dimensions');
 const FrameRateLogger = require('../Interaction/FrameRateLogger');
 const Keyboard = require('./Keyboard/Keyboard');
-const Platform = require('../Utilities/Platform');
 const React = require('react');
 const ReactNative = require('../Renderer/shims/ReactNative');
 const TextInputState = require('./TextInput/TextInputState');
